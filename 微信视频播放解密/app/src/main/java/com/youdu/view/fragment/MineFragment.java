@@ -1,0 +1,148 @@
+package com.youdu.view.fragment;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.youdu.R;
+import com.youdu.activity.LoginActivity;
+import com.youdu.activity.SettingActivity;
+import com.youdu.manager.UserManager;
+import com.youdu.share.ShareDialog;
+import com.youdu.view.MyQrCodeDialog;
+
+import cn.sharesdk.framework.Platform;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+/**
+ * @author: vision
+ * @function: 个人信息fragment
+ * @date: 16/7/14
+ */
+public class MineFragment extends BaseFragment implements OnClickListener {
+
+    /**
+     * UI
+     */
+    private View mContentView;
+    private RelativeLayout mLoginLayout;
+    private CircleImageView mPhotoView;
+    private TextView mLoginInfoView;
+    private TextView mLoginView;
+    private RelativeLayout mLoginedLayout;
+    private TextView mUserNameView;
+    private TextView mTickView;
+    private TextView mVideoPlayerView;
+    private TextView mShareView;
+    private TextView mQrCodeView;
+
+    public MineFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mContext = getActivity();
+        mContentView = inflater.inflate(R.layout.fragment_mine_layout, null, false);
+        initView();
+        return mContentView;
+    }
+
+    private void initView() {
+        mLoginLayout = (RelativeLayout) mContentView.findViewById(R.id.login_layout);
+        mLoginLayout.setOnClickListener(this);
+        mLoginedLayout = (RelativeLayout) mContentView.findViewById(R.id.logined_layout);
+        mLoginedLayout.setOnClickListener(this);
+
+        mPhotoView = (CircleImageView) mContentView.findViewById(R.id.photo_view);
+        mPhotoView.setOnClickListener(this);
+        mLoginView = (TextView) mContentView.findViewById(R.id.login_view);
+        mLoginView.setOnClickListener(this);
+        mVideoPlayerView = (TextView) mContentView.findViewById(R.id.video_setting_view);
+        mVideoPlayerView.setOnClickListener(this);
+        mShareView = (TextView) mContentView.findViewById(R.id.share_imooc_view);
+        mShareView.setOnClickListener(this);
+        mQrCodeView = (TextView) mContentView.findViewById(R.id.my_qrcode_view);
+        mQrCodeView.setOnClickListener(this);
+        mLoginInfoView = (TextView) mContentView.findViewById(R.id.login_info_view);
+        mUserNameView = (TextView) mContentView.findViewById(R.id.username_view);
+        mTickView = (TextView) mContentView.findViewById(R.id.tick_view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserManager.getInstance().hasLogined()) {
+            //更新我们的fragment
+            if (mLoginedLayout.getVisibility() == View.GONE) {
+                mLoginLayout.setVisibility(View.GONE);
+                mLoginedLayout.setVisibility(View.VISIBLE);
+                mUserNameView.setText(UserManager.getInstance().getUser().data.name);
+                mTickView.setText(UserManager.getInstance().getUser().data.tick);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.share_imooc_view:
+                //分享Imooc课网址
+                shareFriend();
+                break;
+            case R.id.login_layout:
+            case R.id.login_view:
+                //未登陆，则跳轉到登陸页面
+                if (!UserManager.getInstance().hasLogined()) {
+                    toLogin();
+                }
+                break;
+            case R.id.my_qrcode_view:
+                if (!UserManager.getInstance().hasLogined()) {
+                    //未登陆，去登陆。
+                    toLogin();
+                } else {
+                    //已登陆根据用户ID生成二维码显示
+                    MyQrCodeDialog dialog = new MyQrCodeDialog(mContext);
+                    dialog.show();
+                }
+                break;
+            case R.id.video_setting_view:
+                mContext.startActivity(new Intent(mContext, SettingActivity.class));
+                break;
+        }
+    }
+
+    /**
+     * 去登陆页面
+     */
+    private void toLogin() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
+    }
+
+    /**
+     * 分享慕课网给好友
+     */
+    private void shareFriend() {
+        ShareDialog dialog = new ShareDialog(mContext);
+        dialog.setShareType(Platform.SHARE_IMAGE);
+        dialog.setShareTitle("慕课网");
+        dialog.setShareTitleUrl("http://www.imooc.com");
+        dialog.setShareText("慕课网");
+        dialog.setShareSite("imooc");
+        dialog.setShareSiteUrl("http://www.imooc.com");
+        dialog.setImagePhoto(Environment.getExternalStorageDirectory() + "/test2.jpg");
+        dialog.show();
+    }
+}
