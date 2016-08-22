@@ -1,8 +1,12 @@
 package com.youdu.view.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,17 +46,22 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     private TextView mShareView;
     private TextView mQrCodeView;
 
+    //自定义了一个广播接收器
+    private LoginBroadcastReceiver receiver =
+            new LoginBroadcastReceiver();
+
     public MineFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity();
+        registerBroadcast();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mContext = getActivity();
         mContentView = inflater.inflate(R.layout.fragment_mine_layout, null, false);
         initView();
         return mContentView;
@@ -82,15 +91,12 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        if (UserManager.getInstance().hasLogined()) {
-            //更新我们的fragment
-            if (mLoginedLayout.getVisibility() == View.GONE) {
-                mLoginLayout.setVisibility(View.GONE);
-                mLoginedLayout.setVisibility(View.VISIBLE);
-                mUserNameView.setText(UserManager.getInstance().getUser().data.name);
-                mTickView.setText(UserManager.getInstance().getUser().data.tick);
-            }
-        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterBroadcast();
     }
 
     @Override
@@ -144,5 +150,36 @@ public class MineFragment extends BaseFragment implements OnClickListener {
         dialog.setShareSiteUrl("http://www.imooc.com");
         dialog.setImagePhoto(Environment.getExternalStorageDirectory() + "/test2.jpg");
         dialog.show();
+    }
+
+    private void registerBroadcast() {
+
+        IntentFilter filter =
+                new IntentFilter(LoginActivity.LOGIN_ACTION);
+        LocalBroadcastManager.getInstance(mContext)
+                .registerReceiver(receiver, filter);
+    }
+
+    private void unregisterBroadcast() {
+        LocalBroadcastManager.getInstance(mContext)
+                .unregisterReceiver(receiver);
+    }
+
+    /**
+     * 接收mina发送来的消息，并更新UI
+     */
+    private class LoginBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UserManager.getInstance().hasLogined()) {
+                //更新我们的fragment
+                if (mLoginedLayout.getVisibility() == View.GONE) {
+                    mLoginLayout.setVisibility(View.GONE);
+                    mLoginedLayout.setVisibility(View.VISIBLE);
+                    mUserNameView.setText(UserManager.getInstance().getUser().data.name);
+                    mTickView.setText(UserManager.getInstance().getUser().data.tick);
+                }
+            }
+        }
     }
 }

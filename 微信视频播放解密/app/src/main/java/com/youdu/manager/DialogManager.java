@@ -33,6 +33,7 @@ public class DialogManager {
         if (mDialog == null) {
             mDialog = new ProgressDialog(context);
             mDialog.setMessage(context.getResources().getString(R.string.please_wait));
+            mDialog.setCanceledOnTouchOutside(false);
         }
         mDialog.show();
     }

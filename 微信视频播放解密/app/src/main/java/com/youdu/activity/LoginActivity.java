@@ -2,10 +2,12 @@ package com.youdu.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youdu.R;
@@ -13,22 +15,31 @@ import com.youdu.activity.base.BaseActivity;
 import com.youdu.manager.DialogManager;
 import com.youdu.manager.UserManager;
 import com.youdu.module.user.User;
-import com.youdu.network.RequestCenter;
+import com.youdu.network.http.RequestCenter;
 import com.youdu.network.mina.MinaService;
 import com.youdu.okhttp.listener.DisposeDataListener;
+import com.youdu.share.ShareManager;
+import com.youdu.util.LogUtils;
 import com.youdu.view.associatemail.MailBoxAssociateTokenizer;
 import com.youdu.view.associatemail.MailBoxAssociateView;
+
+import java.util.HashMap;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
+    //自定义登陆广播Action
+    public static final String LOGIN_ACTION = "com.imooc.LOGIN_ACTION";
     /**
      * UI
      */
     private MailBoxAssociateView mUserNameAssociateView;
     private EditText mPasswordView;
     private TextView mLoginView;
-
+    private RelativeLayout mQQLoginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +61,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 R.id.tv_recommend_mail, recommendMailBox);
         mUserNameAssociateView.setAdapter(adapter);
         mUserNameAssociateView.setTokenizer(new MailBoxAssociateTokenizer());
+
+        mQQLoginLayout = (RelativeLayout) findViewById(R.id.qq_layout);
+        mQQLoginLayout.setOnClickListener(this);
     }
 
     @Override
@@ -59,9 +73,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.login_button:
                 login();
                 break;
+            case R.id.qq_layout:
+                qqLogin();
+                break;
         }
     }
 
+    //发送登陆请求
     private void login() {
 
         String userName = mUserNameAssociateView.getText().toString().trim();
@@ -81,10 +99,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onSuccess(Object responseObj) {
                 DialogManager.getInstnce().dismissProgressDialog();
                 User user = (User) responseObj;
-                UserManager.getInstance().setUser(user);//保存当前用户对象
+                UserManager.getInstance().setUser(user);//保存当前用户单例对象
 
-                //启动长连接
-                startService(new Intent(LoginActivity.this, MinaService.class));
+                connectToSever();
+                sendLoginBroadcast();
                 finish();//销毁当前登陆页面
             }
 
@@ -93,5 +111,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 DialogManager.getInstnce().dismissProgressDialog();
             }
         });
+    }
+
+    //利用QQ实现第三方登陆
+    private void qqLogin() {
+        ShareManager.getInstance().loginEntry(ShareManager.PlatofrmType.QQ, new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+
+                LogUtils.e("LoginActivity", hashMap.toString());
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+
+                LogUtils.e("LoginActivity", "onError: " + throwable.getMessage());
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                LogUtils.e("LoginActivity", "onCancel: " + i);
+            }
+        });
+    }
+
+    //启动长连接
+    private void connectToSever() {
+        startService(new Intent(LoginActivity.this, MinaService.class));
+    }
+
+    //向整个应用发送登陆广播事件
+    private void sendLoginBroadcast() {
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(LOGIN_ACTION));
     }
 }
