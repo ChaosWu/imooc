@@ -2,8 +2,6 @@ package com.youdu.share;
 
 import android.content.Context;
 
-import com.youdu.util.LogUtils;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -88,14 +86,11 @@ public class ShareManager {
             case QZone:
                 mCurrentPlatform = ShareSDK.getPlatform(QZone.NAME);
                 break;
-            default:
-                break;
         }
 
         mCurrentPlatform.setPlatformActionListener(listener);
         mCurrentPlatform.SSOSetting(false);
         mCurrentPlatform.showUser(null); // 请求用户信息
-        LogUtils.e("ShareManager", "go here");
     }
 
     /**

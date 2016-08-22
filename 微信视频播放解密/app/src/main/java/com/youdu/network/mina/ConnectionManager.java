@@ -20,8 +20,8 @@ import java.net.InetSocketAddress;
  */
 public class ConnectionManager {
 
-    private static String BROADCAST_ACTION = "com.imooc.mina.broadcast";
-    private static String MESSAGE = "message";
+    public static String BROADCAST_ACTION = "com.imooc.mina.broadcast";
+    public static String MESSAGE = "message";
 
     private ConnectionConfig mConfig;
     private WeakReference<Context> mContext;

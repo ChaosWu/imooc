@@ -10,8 +10,8 @@
 
 
     <QZone
-        AppId="1104917113"
-        AppKey="uH5MYQ3FEZd6vVJu"
+        AppId="1105636158"
+        AppKey="FAifDlwFtUbl4tig"
         Id="1"
         ShareByAppClient="true"
         SortId="1"/>
@@ -46,8 +46,8 @@
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
 
     <QQ
-        AppId="1104917113"
-        AppKey="uH5MYQ3FEZd6vVJu"
+        AppId="1105636158"
+        AppKey="FAifDlwFtUbl4tig"
         Enable="true"
         Id="5"
         ShareByAppClient="true"

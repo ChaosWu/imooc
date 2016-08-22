@@ -18,7 +18,7 @@ public class MinaService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        mConection = new ConnectThread("connection", getApplicationContext());
+        mConection = new ConnectThread("mina", getApplicationContext());
         mConection.start();
     }
 
@@ -50,7 +50,7 @@ public class MinaService extends Service {
         ConnectThread(String name, Context context) {
             super(name);
             ConnectionConfig config = new ConnectionConfig.Builder(context)
-                    .setIP("192.168.1.34")
+                    .setIP("192.168.1.14")
                     .setPort(9123)
                     .setReadBufferSize(10240)
                     .builder();
