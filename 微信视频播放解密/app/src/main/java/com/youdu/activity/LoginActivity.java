@@ -18,15 +18,8 @@ import com.youdu.module.user.User;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.network.mina.MinaService;
 import com.youdu.okhttp.listener.DisposeDataListener;
-import com.youdu.share.ShareManager;
-import com.youdu.util.LogUtils;
 import com.youdu.view.associatemail.MailBoxAssociateTokenizer;
 import com.youdu.view.associatemail.MailBoxAssociateView;
-
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -39,7 +32,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private MailBoxAssociateView mUserNameAssociateView;
     private EditText mPasswordView;
     private TextView mLoginView;
-    private RelativeLayout mQQLoginLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +53,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 R.id.tv_recommend_mail, recommendMailBox);
         mUserNameAssociateView.setAdapter(adapter);
         mUserNameAssociateView.setTokenizer(new MailBoxAssociateTokenizer());
-
-        mQQLoginLayout = (RelativeLayout) findViewById(R.id.qq_layout);
-        mQQLoginLayout.setOnClickListener(this);
     }
 
     @Override
@@ -72,9 +61,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.login_button:
                 login();
-                break;
-            case R.id.qq_layout:
-                qqLogin();
                 break;
         }
     }
@@ -109,28 +95,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onFailure(Object reasonObj) {
                 DialogManager.getInstnce().dismissProgressDialog();
-            }
-        });
-    }
-
-    //利用QQ实现第三方登陆
-    private void qqLogin() {
-        ShareManager.getInstance().loginEntry(ShareManager.PlatofrmType.QQ, new PlatformActionListener() {
-            @Override
-            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
-                LogUtils.e("LoginActivity", hashMap.toString());
-            }
-
-            @Override
-            public void onError(Platform platform, int i, Throwable throwable) {
-
-                LogUtils.e("LoginActivity", "onError: " + throwable.getMessage());
-            }
-
-            @Override
-            public void onCancel(Platform platform, int i) {
-                LogUtils.e("LoginActivity", "onCancel: " + i);
             }
         });
     }

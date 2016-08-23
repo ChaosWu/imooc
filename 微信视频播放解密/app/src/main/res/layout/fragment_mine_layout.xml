@@ -171,4 +171,23 @@
         android:layout_height="0.5dp"
         android:background="@color/color_cdcdcd"
     />
+    <TextView
+        android:id="@+id/update_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/arrow_right"
+        android:paddingBottom="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="15dp"
+        android:paddingTop="15dp"
+        android:text="@string/update_info"
+        android:textColor="@color/color_333333"
+        android:textSize="15sp"
+    />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_cdcdcd"
+    />
 </LinearLayout>

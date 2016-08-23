@@ -18,7 +18,13 @@ import com.youdu.R;
 import com.youdu.activity.LoginActivity;
 import com.youdu.activity.SettingActivity;
 import com.youdu.manager.UserManager;
+import com.youdu.module.update.UpdateModel;
+import com.youdu.network.http.RequestCenter;
+import com.youdu.okhttp.listener.DisposeDataListener;
+import com.youdu.service.update.UpdateService;
 import com.youdu.share.ShareDialog;
+import com.youdu.util.Util;
+import com.youdu.view.CommonDialog;
 import com.youdu.view.MyQrCodeDialog;
 
 import cn.sharesdk.framework.Platform;
@@ -45,6 +51,7 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     private TextView mVideoPlayerView;
     private TextView mShareView;
     private TextView mQrCodeView;
+    private TextView mUpdateView;
 
     //自定义了一个广播接收器
     private LoginBroadcastReceiver receiver =
@@ -86,6 +93,9 @@ public class MineFragment extends BaseFragment implements OnClickListener {
         mLoginInfoView = (TextView) mContentView.findViewById(R.id.login_info_view);
         mUserNameView = (TextView) mContentView.findViewById(R.id.username_view);
         mTickView = (TextView) mContentView.findViewById(R.id.tick_view);
+
+        mUpdateView = (TextView) mContentView.findViewById(R.id.update_view);
+        mUpdateView.setOnClickListener(this);
     }
 
     @Override
@@ -126,6 +136,9 @@ public class MineFragment extends BaseFragment implements OnClickListener {
             case R.id.video_setting_view:
                 mContext.startActivity(new Intent(mContext, SettingActivity.class));
                 break;
+            case R.id.update_view:
+                checkVersion();
+                break;
         }
     }
 
@@ -163,6 +176,41 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     private void unregisterBroadcast() {
         LocalBroadcastManager.getInstance(mContext)
                 .unregisterReceiver(receiver);
+    }
+
+    //发送版本检查更新请求
+    private void checkVersion() {
+
+        RequestCenter.checkVersion(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                final UpdateModel updateModel = (UpdateModel) responseObj;
+                if (Util.getVersionCode(mContext) < updateModel.data.currentVersion) {
+                    //说明有新版本,开始下载
+                    CommonDialog dialog = new CommonDialog(mContext, getString(R.string.update_new_version),
+                            getString(R.string.update_title), getString(R.string.update_install),
+                            getString(R.string.cancel), new CommonDialog.DialogClickListener() {
+                        @Override
+                        public void onDialogClick() {
+                            Intent intent = new Intent(mContext, UpdateService.class);
+                            intent.putExtra("lastVersion", "4.2.2");
+                            mContext.startService(intent);
+                        }
+                    });
+                    dialog.show();
+                } else {
+
+                    final CommonDialog confirmDialog = new CommonDialog(mContext, getString(R.string.no_new_version_title),
+                            getString(R.string.no_new_version_msg), getString(R.string.confirm), null);
+                    confirmDialog.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
     }
 
     /**

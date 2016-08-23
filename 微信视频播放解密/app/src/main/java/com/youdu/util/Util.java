@@ -1,5 +1,8 @@
 package com.youdu.util;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 
@@ -48,5 +51,17 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static int getVersionCode(Context context) {
+        int versionCode = 1;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionCode = pi.versionCode;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return versionCode;
     }
 }

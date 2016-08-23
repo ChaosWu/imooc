@@ -55,6 +55,7 @@
         <!--本地产品更新列表服务 -->
         <service android:name=".service.UpdateProductService"/>
         <service android:name=".network.mina.MinaService"/>
+        <service android:name=".service.update.UpdateService"/>
 
         <!--二维码相关 -->
         <activity

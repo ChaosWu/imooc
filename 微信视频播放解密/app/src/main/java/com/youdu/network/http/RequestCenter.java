@@ -1,5 +1,6 @@
 package com.youdu.network.http;
 
+import com.youdu.module.update.UpdateModel;
 import com.youdu.module.user.User;
 import com.youdu.okhttp.CommonOkHttpClient;
 import com.youdu.okhttp.listener.DisposeDataHandle;
@@ -33,5 +34,15 @@ public class RequestCenter {
         params.put("mb", userName);
         params.put("pwd", passwd);
         RequestCenter.postRequest(HttpConstants.LOGIN, params, listener, User.class);
+    }
+
+    /**
+     * 应用版本号请求
+     *
+     * @param url
+     */
+    public static void checkVersion(DisposeDataListener listener) {
+
+        RequestCenter.postRequest(HttpConstants.CHECK_UPDATE, null, listener, UpdateModel.class);
     }
 }

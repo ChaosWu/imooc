@@ -23,4 +23,9 @@ public class HttpConstants {
      * 登陆接口
      */
     public static String LOGIN = ROOT_URL + "/user/login_phone.php";
+
+    /**
+     * 检查更新接口
+     */
+    public static String CHECK_UPDATE = ROOT_URL + "/config/check_update.php";
 }
