@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.youdu.share.ShareManager;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * *******************************************************
@@ -23,6 +25,7 @@ public class ImoocApplication extends Application {
         super.onCreate();
         mApplication = this;
         initShareSDK();
+        initJPush();
     }
 
     public static ImoocApplication getInstance() {
@@ -31,5 +34,10 @@ public class ImoocApplication extends Application {
 
     public void initShareSDK() {
         ShareManager.initSDK(this);
+    }
+
+    private void initJPush() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 }

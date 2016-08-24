@@ -37,6 +37,13 @@ android {
         abortOnError false
         lintConfig file("lint.xml")
     }
+
+    //使AS知道.so文件的位置
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
