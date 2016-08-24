@@ -20,8 +20,8 @@ public class UpdateService extends Service {
     /**
      * 服务器固定地址
      */
-    private static final String APK_URL_TITLE = "http://www.qianjing.com/download/android/imooc_";
-    private static final String APK_URL_END = ".apk";
+    private static final String APK_URL_TITLE = "http://www.imooc.com/mobile/mukewang.apk";
+    //private static final String APK_URL_END = ".apk";
     /**
      * 文件存放路经
      */
@@ -30,7 +30,6 @@ public class UpdateService extends Service {
      * 文件下载地址
      */
     private String apkUrl;
-    private String lastVersion;
 
     private NotificationManager notificationManager;
     private Notification mNotification;
@@ -38,20 +37,12 @@ public class UpdateService extends Service {
     @Override
     public void onCreate() {
         notificationManager = (NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-        filePath = Environment.getExternalStorageDirectory() + "/QjFund/QjFund.apk";
+        filePath = Environment.getExternalStorageDirectory() + "/imooc/imooc.apk";
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null || (intent != null && !intent.hasExtra("lastVersion"))) {
-            notifyUser(getString(R.string.update_download_failed), getString(R.string.update_download_failed_msg),
-                    0);
-            stopSelf();// 停掉服务自身
-            return super.onStartCommand(intent, flags, startId);
-        }
-
-        lastVersion = intent.getStringExtra("lastVersion");
-        apkUrl = APK_URL_TITLE + lastVersion + APK_URL_END;
+        apkUrl = APK_URL_TITLE;
         notifyUser(getString(R.string.update_download_start), getString(R.string.update_download_start), 0);
         startDownload();
         return super.onStartCommand(intent, flags, startId);
@@ -66,7 +57,7 @@ public class UpdateService extends Service {
             @Override
             public void onProgressChanged(int progress, String downloadUrl) {
                 notifyUser(getString(R.string.update_download_processing),
-                        getString(R.string.update_download_processing), progress);
+                    getString(R.string.update_download_processing), progress);
             }
 
             @Override
@@ -76,7 +67,7 @@ public class UpdateService extends Service {
             @Override
             public void onPaused(int progress, int completeSize, String downloadUrl) {
                 notifyUser(getString(R.string.update_download_failed),
-                        getString(R.string.update_download_failed_msg), 0);
+                    getString(R.string.update_download_failed_msg), 0);
                 deleteApkFile();
                 stopSelf();// 停掉服务自身
             }
@@ -84,7 +75,7 @@ public class UpdateService extends Service {
             @Override
             public void onFinished(int completeSize, String downloadUrl) {
                 notifyUser(getString(R.string.update_download_finish), getString(R.string.update_download_finish),
-                        100);
+                    100);
                 stopSelf();// 停掉服务自身
                 startActivity(getInstallApkIntent());
             }
@@ -92,7 +83,7 @@ public class UpdateService extends Service {
             @Override
             public void onFailure() {
                 notifyUser(getString(R.string.update_download_failed),
-                        getString(R.string.update_download_failed_msg), 0);
+                    getString(R.string.update_download_failed_msg), 0);
                 deleteApkFile();
                 stopSelf();// 停掉服务自身
             }
@@ -127,14 +118,14 @@ public class UpdateService extends Service {
         notification.setWhen(System.currentTimeMillis());
         notification.setTicker(tickerMsg);
         notification.setContentIntent(progress >= 100 ? getContentIntent() : PendingIntent.getActivity(this, 0,
-                new Intent(), PendingIntent.FLAG_UPDATE_CURRENT));
+            new Intent(), PendingIntent.FLAG_UPDATE_CURRENT));
         mNotification = notification.build();
         notificationManager.notify(0, mNotification);
     }
 
     private PendingIntent getContentIntent() {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, getInstallApkIntent(),
-                PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent.FLAG_UPDATE_CURRENT);
         return contentIntent;
     }
 
