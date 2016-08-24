@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.youdu.R;
 import com.youdu.activity.LoginActivity;
 import com.youdu.activity.SettingActivity;
+import com.youdu.constant.Constant;
 import com.youdu.manager.UserManager;
 import com.youdu.module.update.UpdateModel;
 import com.youdu.network.http.RequestCenter;
@@ -137,9 +138,18 @@ public class MineFragment extends BaseFragment implements OnClickListener {
                 mContext.startActivity(new Intent(mContext, SettingActivity.class));
                 break;
             case R.id.update_view:
-                checkVersion();
+                if (hasPermission(Constant.WRITE_READ_EXTERNAL_PERMISSION)) {
+                    checkVersion();
+                } else {
+                    requestPermission(Constant.WRITE_READ_EXTERNAL_CODE, Constant.WRITE_READ_EXTERNAL_PERMISSION);
+                }
                 break;
         }
+    }
+
+    @Override
+    public void doWriteSDCard() {
+        checkVersion();
     }
 
     /**
@@ -180,7 +190,6 @@ public class MineFragment extends BaseFragment implements OnClickListener {
 
     //发送版本检查更新请求
     private void checkVersion() {
-
         RequestCenter.checkVersion(new DisposeDataListener() {
             @Override
             public void onSuccess(Object responseObj) {
@@ -193,7 +202,6 @@ public class MineFragment extends BaseFragment implements OnClickListener {
                         @Override
                         public void onDialogClick() {
                             Intent intent = new Intent(mContext, UpdateService.class);
-                            //intent.putExtra("lastVersion", String.valueOf(updateModel.data.currentVersion));
                             mContext.startService(intent);
                         }
                     });

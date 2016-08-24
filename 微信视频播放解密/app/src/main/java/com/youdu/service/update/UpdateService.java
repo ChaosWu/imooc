@@ -21,7 +21,6 @@ public class UpdateService extends Service {
      * 服务器固定地址
      */
     private static final String APK_URL_TITLE = "http://www.imooc.com/mobile/mukewang.apk";
-    //private static final String APK_URL_END = ".apk";
     /**
      * 文件存放路经
      */

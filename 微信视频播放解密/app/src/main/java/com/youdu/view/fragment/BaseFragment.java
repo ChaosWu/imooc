@@ -48,9 +48,20 @@ public class BaseFragment extends Fragment {
                     doOpenCamera();
                 }
                 break;
+            case Constant.WRITE_READ_EXTERNAL_CODE:
+                if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    doWriteSDCard();
+                }
+                break;
         }
     }
 
     public void doOpenCamera() {
+
+    }
+
+    public void doWriteSDCard() {
+
     }
 }
