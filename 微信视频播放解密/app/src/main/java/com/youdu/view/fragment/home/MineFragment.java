@@ -1,4 +1,4 @@
-package com.youdu.view.fragment;
+package com.youdu.view.fragment.home;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,6 +27,7 @@ import com.youdu.share.ShareDialog;
 import com.youdu.util.Util;
 import com.youdu.view.CommonDialog;
 import com.youdu.view.MyQrCodeDialog;
+import com.youdu.view.fragment.BaseFragment;
 
 import cn.sharesdk.framework.Platform;
 import de.hdodenhof.circleimageview.CircleImageView;

@@ -1,4 +1,4 @@
-package com.youdu.view.fragment;
+package com.youdu.view.fragment.home;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,6 +20,7 @@ import com.youdu.activity.SearchActivity;
 import com.youdu.adapter.AdAdapter;
 import com.youdu.constant.Constant;
 import com.youdu.share.ShareDialog;
+import com.youdu.view.fragment.BaseFragment;
 import com.youdu.zxing.app.CaptureActivity;
 
 import java.util.ArrayList;

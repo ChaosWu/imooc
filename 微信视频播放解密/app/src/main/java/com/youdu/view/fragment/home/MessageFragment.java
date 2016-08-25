@@ -1,4 +1,4 @@
-package com.youdu.view.fragment;
+package com.youdu.view.fragment.home;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,6 +16,7 @@ import com.youdu.module.mina.MinaModel;
 import com.youdu.network.mina.ConnectionManager;
 import com.youdu.network.mina.MinaReceiver;
 import com.youdu.util.ResponseEntityToModule;
+import com.youdu.view.fragment.BaseFragment;
 
 /**
  * @author: vision

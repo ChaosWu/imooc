@@ -40,8 +40,8 @@ import com.youdu.vuandroidadsdk.R;
  * @date 2016/6/18
  */
 public class CustomVideoView extends RelativeLayout implements View.OnClickListener,
-    MediaPlayer.OnPreparedListener, MediaPlayer.OnInfoListener, MediaPlayer.OnErrorListener,
-    MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, TextureView.SurfaceTextureListener {
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnInfoListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener, TextureView.SurfaceTextureListener {
     /**
      * Constant
      */
@@ -81,7 +81,6 @@ public class CustomVideoView extends RelativeLayout implements View.OnClickListe
     private boolean mIsRealPause;
     private boolean mIsComplete;
     private int mCurrentCount;
-    //private int currentPosition;
     private int playerState = STATE_IDLE;
 
     private MediaPlayer mediaPlayer;
@@ -124,7 +123,6 @@ public class CustomVideoView extends RelativeLayout implements View.OnClickListe
     }
 
     private void initView() {
-        this.setId(R.id.mraid_video_view);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         mPlayerView = (RelativeLayout) inflater.inflate(R.layout.xadsdk_video_player, this);
         mVideoView = (TextureView) mPlayerView.findViewById(R.id.xadsdk_player_video_textureView);
@@ -257,7 +255,7 @@ public class CustomVideoView extends RelativeLayout implements View.OnClickListe
         if (v == this.mMiniPlayBtn) {
             if (this.playerState == STATE_PAUSING) {
                 if (Utils.getVisiblePercent(mParentContainer)
-                    > SDKConstant.VIDEO_SCREEN_PERCENT) {
+                        > SDKConstant.VIDEO_SCREEN_PERCENT) {
                     resume();
                     this.listener.onClickPlay();
                 }
@@ -317,8 +315,8 @@ public class CustomVideoView extends RelativeLayout implements View.OnClickListe
             }
             //满足自动播放条件，则直接播放
             if (Utils.canAutoPlay(getContext(),
-                AdContextParameters.getCurrentSetting()) &&
-                Utils.getVisiblePercent(mParentContainer) > SDKConstant.VIDEO_SCREEN_PERCENT) {
+                    AdContextParameters.getCurrentSetting()) &&
+                    Utils.getVisiblePercent(mParentContainer) > SDKConstant.VIDEO_SCREEN_PERCENT) {
                 setCurrentPlayState(STATE_PAUSING);
                 resume();
             } else {
@@ -717,7 +715,7 @@ public class CustomVideoView extends RelativeLayout implements View.OnClickListe
             SurfaceTexture texture = mVideoView.getSurfaceTexture();
             if (texture != null) {
                 texture.setDefaultBufferSize(mediaPlayer.getVideoWidth(),
-                    mediaPlayer.getVideoHeight());
+                        mediaPlayer.getVideoHeight());
             }
         }
     }

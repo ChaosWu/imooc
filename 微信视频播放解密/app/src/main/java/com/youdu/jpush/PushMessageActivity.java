@@ -45,7 +45,6 @@ public class PushMessageActivity extends BaseActivity {
     }
 
     private void initView() {
-
         mTypeView = (TextView) findViewById(R.id.message_type_view);
         mTypeValueView = (TextView) findViewById(R.id.message_type_value_view);
         mContentView = (TextView) findViewById(R.id.message_content_view);

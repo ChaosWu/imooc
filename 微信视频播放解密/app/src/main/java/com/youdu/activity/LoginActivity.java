@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         mUserNameAssociateView = (MailBoxAssociateView) findViewById(R.id.associate_email_input);
         String[] recommendMailBox = getResources().getStringArray(R.array.recommend_mailbox);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.associate_mail_list_item,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_associate_mail_list,
             R.id.tv_recommend_mail, recommendMailBox);
         mUserNameAssociateView.setAdapter(adapter);
         mUserNameAssociateView.setTokenizer(new MailBoxAssociateTokenizer());

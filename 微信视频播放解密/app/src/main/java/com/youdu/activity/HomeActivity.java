@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
 import com.youdu.service.UpdateProductService;
-import com.youdu.view.fragment.CommonFragment;
-import com.youdu.view.fragment.HomeFragment;
-import com.youdu.view.fragment.MessageFragment;
-import com.youdu.view.fragment.MineFragment;
+import com.youdu.view.fragment.home.CommonFragment;
+import com.youdu.view.fragment.home.HomeFragment;
+import com.youdu.view.fragment.home.MessageFragment;
+import com.youdu.view.fragment.home.MineFragment;
 
 
 public class HomeActivity extends BaseActivity implements OnClickListener {

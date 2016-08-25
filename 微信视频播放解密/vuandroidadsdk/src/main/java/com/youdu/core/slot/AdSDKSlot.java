@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.youdu.activity.AdBrowserActivity;
 import com.youdu.constant.SDKConstant;
@@ -49,14 +50,19 @@ public class AdSDKSlot implements ADVideoPlayerListener {
     }
 
     private void initVideoView(ADFrameImageLoadListener frameImageLoadListener) {
-        this.mVideoView = new CustomVideoView(mContext, mParentView);
+
+        mVideoView = new CustomVideoView(mContext, mParentView);
         if (mXAdInstance != null) {
-            this.mVideoView.setDataSource(mXAdInstance.values.get(0).resource);
-            this.mVideoView.setFrameURI(mXAdInstance.values.get(0).thumb);
-            this.mVideoView.setFrameLoadListener(frameImageLoadListener);
-            this.mVideoView.setListener(this);
+            mVideoView.setDataSource(mXAdInstance.values.get(0).resource);
+            mVideoView.setFrameURI(mXAdInstance.values.get(0).thumb);
+            mVideoView.setFrameLoadListener(frameImageLoadListener);
+            mVideoView.setListener(this);
         }
-        this.mParentView.addView(mVideoView);
+        RelativeLayout paddingView = new RelativeLayout(mContext);
+        paddingView.setBackgroundColor(mContext.getResources().getColor(android.R.color.black));
+        paddingView.setLayoutParams(mVideoView.getLayoutParams());
+        mParentView.addView(paddingView);
+        mParentView.addView(mVideoView);
     }
 
     private boolean isPlaying() {
@@ -141,7 +147,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
 
         //满足自动播放条件或者用户主动点击播放，开始播放
         if (Utils.canAutoPlay(mContext, AdContextParameters.getCurrentSetting())
-            || isPlaying()) {
+                || isPlaying()) {
             lastArea = currentArea;
             resumeVideo();
             canPause = true;
@@ -169,9 +175,9 @@ public class AdSDKSlot implements ADVideoPlayerListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.mParentView.removeAllViews();
+        mParentView.removeView(mVideoView);
         VideoFullDialog dialog = new VideoFullDialog(mContext, mVideoView, mXAdInstance,
-            this.mVideoView.getCurrentPosition());
+                mVideoView.getCurrentPosition());
         dialog.setListener(new FullToSmallListener() {
             @Override
             public void getCurrentPlayPosition(int position) {
@@ -218,7 +224,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
                 mSlotListener.onClickVideo(desationUrl);
                 try {
                     ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
-                        / SDKConstant.MILLION_UNIT);
+                            / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -231,7 +237,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
                 mContext.startActivity(intent);
                 try {
                     ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
-                        / SDKConstant.MILLION_UNIT);
+                            / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

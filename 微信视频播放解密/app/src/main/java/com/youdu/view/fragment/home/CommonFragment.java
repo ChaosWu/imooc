@@ -1,4 +1,4 @@
-package com.youdu.view.fragment;
+package com.youdu.view.fragment.home;
 
 import android.app.Fragment;
 import android.content.Context;

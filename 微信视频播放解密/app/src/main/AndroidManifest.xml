@@ -53,7 +53,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.HomeActivity"
+            android:name=".activity.GuideActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateHidden">
@@ -62,6 +62,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HomeActivity"
+                  android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/title_activity_setting">
