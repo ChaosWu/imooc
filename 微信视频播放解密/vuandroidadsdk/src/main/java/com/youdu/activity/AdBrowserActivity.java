@@ -37,7 +37,6 @@ public final class AdBrowserActivity extends Activity {
     private BrowserWebView mAdBrowserWebview;
     private AdBrowserLayout mLayout;
 
-    //private BaseAd mBaseAd;
     private boolean mIsBackFromMarket = false;
 
     private View mProgress;
@@ -73,7 +72,6 @@ public final class AdBrowserActivity extends Activity {
             } else {
                 mAdBrowserWebview.loadUrl(mUrl);
             }
-
             initButtonListeners(mAdBrowserWebview);
         } else {
             finish();

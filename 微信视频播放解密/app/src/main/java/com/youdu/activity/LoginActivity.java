@@ -7,13 +7,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
+import com.youdu.jpush.PushMessageActivity;
 import com.youdu.manager.DialogManager;
 import com.youdu.manager.UserManager;
+import com.youdu.module.PushMessage;
 import com.youdu.module.user.User;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.network.mina.MinaService;
@@ -33,11 +34,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText mPasswordView;
     private TextView mLoginView;
 
+    /**
+     * data
+     */
+    private PushMessage mPushMessage; // 推送过来的消息
+    private boolean fromPush; // 是否从推送到此页面
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_layout);
+        initData();
         initView();
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        if (intent.hasExtra("pushMessage")) {
+            mPushMessage = (PushMessage) intent.getSerializableExtra("pushMessage");
+        }
+        fromPush = intent.getBooleanExtra("fromPush", false);
     }
 
     private void initView() {
@@ -50,7 +66,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         mUserNameAssociateView = (MailBoxAssociateView) findViewById(R.id.associate_email_input);
         String[] recommendMailBox = getResources().getStringArray(R.array.recommend_mailbox);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.associate_mail_list_item,
-                R.id.tv_recommend_mail, recommendMailBox);
+            R.id.tv_recommend_mail, recommendMailBox);
         mUserNameAssociateView.setAdapter(adapter);
         mUserNameAssociateView.setTokenizer(new MailBoxAssociateTokenizer());
     }
@@ -86,9 +102,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 DialogManager.getInstnce().dismissProgressDialog();
                 User user = (User) responseObj;
                 UserManager.getInstance().setUser(user);//保存当前用户单例对象
-
                 connectToSever();
                 sendLoginBroadcast();
+
+                if (fromPush) {
+                    Intent intent = new Intent(LoginActivity.this, PushMessageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("pushMessage", mPushMessage);
+                    startActivity(intent);
+                }
                 finish();//销毁当前登陆页面
             }
 

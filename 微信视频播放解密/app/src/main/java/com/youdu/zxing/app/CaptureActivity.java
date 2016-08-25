@@ -522,18 +522,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (resultCode == RESULT_OK) {
             uri = data.getData();
             new Thread(new Runnable() {
-
                 @Override
                 public void run() {
 
                     Result result = scanningImage(uri);
-                    // String result = decode(photo_path);
                     if (result == null) {
                         Looper.prepare();
                         Toast.makeText(getApplicationContext(), "图片格式有误", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     } else {
-                        // 数据返回
+                        // 数据返回，在这里去处理扫码结果
                         String recode = (result.toString());
                         Intent data = new Intent();
                         data.putExtra("result", recode);
@@ -549,7 +547,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (path == null || path.equals("")) {
             return null;
         }
-
         // DecodeHintType 和EncodeHintType
         Hashtable<DecodeHintType, String> hints = new Hashtable<DecodeHintType, String>();
         hints.put(DecodeHintType.CHARACTER_SET, "utf-8"); // 设置二维码内容的编码

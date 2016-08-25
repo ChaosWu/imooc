@@ -2,7 +2,6 @@ package com.youdu.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import com.youdu.activity.AdBrowserActivity;
 import com.youdu.constant.Constant;
 import com.youdu.core.AdContextInterface;
 import com.youdu.core.context.AdContext;
-import com.youdu.widget.CustomVideoView.ImageLoaderListener;
 import com.youdu.widget.CustomVideoView.ADFrameImageLoadListener;
+import com.youdu.widget.CustomVideoView.ImageLoaderListener;
 
 import java.util.ArrayList;
 
@@ -153,7 +152,6 @@ public class AdAdapter extends BaseAdapter {
 
         @Override
         public void onStartFrameLoad(String url, ImageLoaderListener listener) {
-            Log.e("Adapter", "gp here");
             listener.onLoadingComplete(null);
         }
     };

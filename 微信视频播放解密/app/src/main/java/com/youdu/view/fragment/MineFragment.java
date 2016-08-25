@@ -102,6 +102,15 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        //根据用户信息更新我们的fragment
+        if (UserManager.getInstance().hasLogined()) {
+            if (mLoginedLayout.getVisibility() == View.GONE) {
+                mLoginLayout.setVisibility(View.GONE);
+                mLoginedLayout.setVisibility(View.VISIBLE);
+                mUserNameView.setText(UserManager.getInstance().getUser().data.name);
+                mTickView.setText(UserManager.getInstance().getUser().data.tick);
+            }
+        }
     }
 
     @Override

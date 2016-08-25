@@ -42,6 +42,9 @@
     <string name="imooc_message">慕课网</string>
     <string name="imooc_message_info">再不学习慕女神不喜欢你了.</string>
     <string name="update_info">版本更新</string>
+    <string name="jpush_message_type">消息类型:</string>
+    <string name="jpush_message_content">消息内容:</string>
+    <string name="jpush_message_title">推送消息</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>

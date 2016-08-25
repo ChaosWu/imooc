@@ -1,5 +1,6 @@
 package com.youdu.view.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,8 +12,10 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.youdu.R;
+import com.youdu.activity.AdBrowserActivity;
 import com.youdu.activity.SearchActivity;
 import com.youdu.adapter.AdAdapter;
 import com.youdu.constant.Constant;
@@ -37,6 +40,7 @@ import cn.sharesdk.framework.PlatformActionListener;
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener, PlatformActionListener {
 
+    private static final int REQUEST_QRCODE = 0x01;
     /**
      * UI
      */
@@ -102,7 +106,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.qrcode_view:
                 if (hasPermission(Constant.HARDWEAR_CAMERA_PERMISSION)) {
@@ -129,7 +132,25 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void doOpenCamera() {
         Intent intent = new Intent(mContext, CaptureActivity.class);
-        mContext.startActivityForResult(intent, 01);
+        startActivityForResult(intent, REQUEST_QRCODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_QRCODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String code = data.getStringExtra("SCAN_RESULT");
+                    if (code.contains("http") || code.contains("https")) {
+                        Intent intent = new Intent(mContext, AdBrowserActivity.class);
+                        intent.putExtra(AdBrowserActivity.KEY_URL, code);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
     }
 
     @Override

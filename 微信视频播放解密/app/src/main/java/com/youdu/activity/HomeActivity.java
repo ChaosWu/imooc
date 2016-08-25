@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
@@ -161,10 +160,5 @@ public class HomeActivity extends BaseActivity implements OnClickListener {
         }
 
         fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        //super.onSaveInstanceState(outState, outPersistentState);
     }
 }
