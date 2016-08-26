@@ -6,14 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ProductTourFragment extends Fragment
+public class GuideFragment extends Fragment
 {
 
 	final static String LAYOUT_ID = "layoutid";
 
-	public static ProductTourFragment newInstance(int layoutId)
+	public static GuideFragment newInstance(int layoutId)
 	{
-		ProductTourFragment pane = new ProductTourFragment();
+		GuideFragment pane = new GuideFragment();
 		Bundle args = new Bundle();
 		args.putInt(LAYOUT_ID, layoutId);
 		pane.setArguments(args);

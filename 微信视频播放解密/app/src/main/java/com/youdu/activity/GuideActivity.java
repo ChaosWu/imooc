@@ -14,7 +14,7 @@ import android.view.View;
 import com.nineoldandroids.view.ViewHelper;
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
-import com.youdu.view.fragment.guide.ProductTourFragment;
+import com.youdu.view.fragment.guide.GuideFragment;
 
 public class GuideActivity extends BaseActivity {
 
@@ -103,22 +103,22 @@ public class GuideActivity extends BaseActivity {
 
         @Override
         public Fragment getItem(int position) {
-            ProductTourFragment tp = null;
+            GuideFragment tp = null;
             switch (position) {
                 case 0:
-                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_one);
+                    tp = GuideFragment.newInstance(R.layout.fragment_welcome_one);
                     break;
                 case 1:
-                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_two);
+                    tp = GuideFragment.newInstance(R.layout.fragment_welcome_two);
                     break;
                 case 2:
-                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_three);
+                    tp = GuideFragment.newInstance(R.layout.fragment_welcome_three);
                     break;
                 case 3:
-                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_four);
+                    tp = GuideFragment.newInstance(R.layout.fragment_welcome_four);
                     break;
                 case 4:
-                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_five);
+                    tp = GuideFragment.newInstance(R.layout.fragment_welcome_five);
                     break;
             }
             return tp;
