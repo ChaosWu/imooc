@@ -46,6 +46,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
         android:name=".application.ImoocApplication"
         android:allowBackup="true"
@@ -62,8 +63,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"
-                  android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/title_activity_setting">
@@ -173,6 +175,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
@@ -209,6 +212,14 @@
             android:name="JPUSH_APPKEY"
             android:value="31c7267ea593bd4b4e96b96a"/>
         <!-- </>值来自开发者平台取得的AppKey -->
+
+        <!-- 友盟统计相关meta-data  -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="56e037ebe0f55a214a000216"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL_VALUE}"/>
     </application>
 
 </manifest>

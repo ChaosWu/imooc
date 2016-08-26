@@ -6,6 +6,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.umeng.analytics.MobclickAgent;
 import com.youdu.constant.Constant;
 
 /**
@@ -28,15 +29,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     private void initUmeng() {
         mClassName = getComponentName().getShortClassName();
-        //MobclickAgent.setDebugMode(true);
-        //MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setDebugMode(true);
+        MobclickAgent.openActivityDurationTrack(false);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // MobclickAgent.onPageStart(mClassName);
-        // MobclickAgent.onResume(this);
+        MobclickAgent.onPageStart(mClassName);
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -47,8 +48,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //MobclickAgent.onPageEnd(mClassName);
-        //MobclickAgent.onPause(this);
+        MobclickAgent.onPageEnd(mClassName);
+        MobclickAgent.onPause(this);
     }
 
     @Override
