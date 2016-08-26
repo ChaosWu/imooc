@@ -5,60 +5,57 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import com.nineoldandroids.view.ViewHelper;
 import com.youdu.R;
+import com.youdu.activity.base.BaseActivity;
 import com.youdu.view.fragment.guide.ProductTourFragment;
 
-public class GuideActivity extends FragmentActivity {
+public class GuideActivity extends BaseActivity {
 
-    static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 5;
 
-    ViewPager pager;
-    PagerAdapter pagerAdapter;
-    LinearLayout circles;
-    boolean isOpaque = true;
+    /**
+     * UI
+     */
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
+
+    private boolean isOpaque = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /**
-         * 设置状态栏为透明,则底部的内容可以显示出来。因为PhoneWindow的Layout为FrameLayout.所以会显示底层的内容
-         */
-        Window window = getWindow();
-        window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_tutorial);
+        setContentView(R.layout.activity_guide_layout);
+        initView();
+    }
 
-        pager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(pagerAdapter);
+    private void initView() {
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
         /**
          * 为viewpager的滑动添加自定义的动画效果
          */
-        pager.setPageTransformer(true, new CrossfadePageTransformer());
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.setPageTransformer(true, new CrossfadePageTransformer());
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 if (position == NUM_PAGES - 2 && positionOffset > 0) {
                     if (isOpaque) {
-                        pager.setBackgroundColor(Color.TRANSPARENT);
+                        mViewPager.setBackgroundColor(Color.TRANSPARENT);
                         isOpaque = false;
                     }
                 } else {
                     if (!isOpaque) {
-                        pager.setBackgroundColor(getResources().getColor(R.color.primary_material_light));
+                        mViewPager.setBackgroundColor(getResources().getColor(R.color.primary_material_light));
                         isOpaque = true;
                     }
                 }
@@ -78,14 +75,13 @@ public class GuideActivity extends FragmentActivity {
 
             }
         });
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (pager != null) {
-            pager.clearOnPageChangeListeners();
+        if (mViewPager != null) {
+            mViewPager.clearOnPageChangeListeners();
         }
     }
 
@@ -96,11 +92,7 @@ public class GuideActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (pager.getCurrentItem() == 0) {
-            super.onBackPressed();
-        } else {
-            pager.setCurrentItem(pager.getCurrentItem() - 1);
-        }
+        finish();
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -114,22 +106,21 @@ public class GuideActivity extends FragmentActivity {
             ProductTourFragment tp = null;
             switch (position) {
                 case 0:
-                    tp = ProductTourFragment.newInstance(R.layout.welcome_fragment1);
+                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_one);
                     break;
                 case 1:
-                    tp = ProductTourFragment.newInstance(R.layout.welcome_fragment2);
+                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_two);
                     break;
                 case 2:
-                    tp = ProductTourFragment.newInstance(R.layout.welcome_fragment3);
+                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_three);
                     break;
                 case 3:
-                    tp = ProductTourFragment.newInstance(R.layout.welcome_fragment4);
+                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_four);
                     break;
                 case 4:
-                    tp = ProductTourFragment.newInstance(R.layout.welcome_fragment5);
+                    tp = ProductTourFragment.newInstance(R.layout.fragment_welcome_five);
                     break;
             }
-
             return tp;
         }
 
