@@ -101,6 +101,5 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 处理整个应用用中的SDCard业务
      */
     public void doSDCardPermission() {
-
     }
 }

@@ -15,6 +15,7 @@
     <color name="color_e3e3e3">#e3e3e3</color>
     <color name="color_cc0000">#cc0000</color>
     <color name="color_d0d0d0">#d0d0d0</color>
+    <color name="color_ffff4444">#ffff4444</color>
 
     <!-- QR_Code -->
     <color name="viewfinder_mask">#60000000</color>
