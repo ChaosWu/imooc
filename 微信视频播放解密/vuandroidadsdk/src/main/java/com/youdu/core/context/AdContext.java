@@ -8,6 +8,7 @@ import com.youdu.core.AdContextInterface;
 import com.youdu.core.slot.AdSDKSlot;
 import com.youdu.core.slot.AdSDKSlot.AdSDKSlotListener;
 import com.youdu.module.AdInstance;
+import com.youdu.module.AdValue;
 import com.youdu.okhttp.HttpConstant;
 import com.youdu.okhttp.HttpConstant.Params;
 import com.youdu.report.ReportManager;
@@ -26,7 +27,7 @@ public class AdContext implements AdSDKSlotListener {
     private ViewGroup mParentView;
 
     private AdSDKSlot mAdSlot;
-    private AdInstance mInstance = null;
+    private AdValue mInstance = null;
     //the listener to the app layer
     private AdContextInterface mListener;
     private ADFrameImageLoadListener mFrameLoadListener;
@@ -34,8 +35,8 @@ public class AdContext implements AdSDKSlotListener {
     public AdContext(ViewGroup parentView, String instance,
                      ADFrameImageLoadListener frameLoadListener) {
         this.mParentView = parentView;
-        this.mInstance = (AdInstance) ResponseEntityToModule.
-            parseJsonToModule(instance, AdInstance.class);
+        this.mInstance = (AdValue) ResponseEntityToModule.
+                parseJsonToModule(instance, AdValue.class);
         this.mFrameLoadListener = frameLoadListener;
         load();
     }
@@ -44,7 +45,7 @@ public class AdContext implements AdSDKSlotListener {
      * init the ad,不调用则不会创建videoview
      */
     public void load() {
-        if (mInstance != null && mInstance.values.get(0).resource != null) {
+        if (mInstance != null && mInstance.resource != null) {
             mAdSlot = new AdSDKSlot(mInstance, this, mFrameLoadListener);
             //发送解析成功事件
             sendAnalizeReport(Params.ad_analize, HttpConstant.AD_DATA_SUCCESS);
@@ -119,9 +120,9 @@ public class AdContext implements AdSDKSlotListener {
     private void sendAnalizeReport(Params step, String result) {
         try {
             ReportManager.sendAdMonitor(Utils.isPad(mParentView.getContext().
-                    getApplicationContext()), mInstance == null ? "" : mInstance.values.get(0).resourceID,
-                Utils.getAdIE(mInstance == null ? null : mInstance.values), Utils.getAppVersion(mParentView.getContext()
-                    .getApplicationContext()), step, result);
+                            getApplicationContext()), mInstance == null ? "" : mInstance.resourceID,
+                    (mInstance == null ? null : mInstance.adid), Utils.getAppVersion(mParentView.getContext()
+                            .getApplicationContext()), step, result);
         } catch (Exception e) {
 
         }

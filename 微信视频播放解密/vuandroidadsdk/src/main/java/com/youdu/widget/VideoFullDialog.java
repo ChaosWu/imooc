@@ -15,6 +15,7 @@ import com.youdu.activity.AdBrowserActivity;
 import com.youdu.constant.SDKConstant;
 import com.youdu.core.slot.AdSDKSlot.AdSDKSlotListener;
 import com.youdu.module.AdInstance;
+import com.youdu.module.AdValue;
 import com.youdu.report.ReportManager;
 import com.youdu.util.LogUtils;
 import com.youdu.vuandroidadsdk.R;
@@ -36,7 +37,7 @@ public class VideoFullDialog extends Dialog
     private ViewGroup mParentView;
     private ImageView mBackButton;
 
-    private AdInstance mXAdInstance;
+    private AdValue mXAdInstance;
     private int mPosition;
     private FullToSmallListener mListener;
     //private XADFrameImageLoadListener mFrameLoadListener;
@@ -44,7 +45,7 @@ public class VideoFullDialog extends Dialog
 
     private AdSDKSlotListener mSlotListener;
 
-    public VideoFullDialog(Context context, CustomVideoView mraidView, AdInstance instance,
+    public VideoFullDialog(Context context, CustomVideoView mraidView, AdValue instance,
                            int position) {
         super(context, R.style.dialog_full_screen);
         this.mContext = context;
@@ -131,12 +132,12 @@ public class VideoFullDialog extends Dialog
 
     @Override
     public void onClickVideo() {
-        String desationUrl = mXAdInstance.values.get(0).clickUrl;
+        String desationUrl = mXAdInstance.clickUrl;
         if (mSlotListener != null) {
             if (mVideoView.isFrameHidden() && !TextUtils.isEmpty(desationUrl)) {
                 mSlotListener.onClickVideo(desationUrl);
                 try {
-                    ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
+                    ReportManager.pauseVideoReport(mXAdInstance.clickMonitor, mVideoView.getCurrentPosition()
                         / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -146,10 +147,10 @@ public class VideoFullDialog extends Dialog
             //走默认样式
             if (mVideoView.isFrameHidden() && !TextUtils.isEmpty(desationUrl)) {
                 Intent intent = new Intent(mContext, AdBrowserActivity.class);
-                intent.putExtra(AdBrowserActivity.KEY_URL, mXAdInstance.values.get(0).clickUrl);
+                intent.putExtra(AdBrowserActivity.KEY_URL, mXAdInstance.clickUrl);
                 mContext.startActivity(intent);
                 try {
-                    ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
+                    ReportManager.pauseVideoReport(mXAdInstance.clickMonitor, mVideoView.getCurrentPosition()
                         / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -162,7 +163,7 @@ public class VideoFullDialog extends Dialog
     public void onClickBackBtn() {
         this.dismiss();
         try {
-            ReportManager.exitfullScreenReport(mXAdInstance.values.get(0).event.exitFull.content, mVideoView.getCurrentPosition()
+            ReportManager.exitfullScreenReport(mXAdInstance.event.exitFull.content, mVideoView.getCurrentPosition()
                 / SDKConstant.MILLION_UNIT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,7 +188,7 @@ public class VideoFullDialog extends Dialog
     public void onAdVideoLoadComplete() {
         try {
             int position = mVideoView.getDuration() / SDKConstant.MILLION_UNIT;
-            ReportManager.sueReport(mXAdInstance.values.get(0).endMonitor, true, position);
+            ReportManager.sueReport(mXAdInstance.endMonitor, true, position);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,8 +202,8 @@ public class VideoFullDialog extends Dialog
     @Override
     public void onBufferUpdate(int time) {
         try {
-            if (mXAdInstance.values != null) {
-                ReportManager.suReport(mXAdInstance.values.get(0).middleMonitor, time / SDKConstant.MILLION_UNIT);
+            if (mXAdInstance != null) {
+                ReportManager.suReport(mXAdInstance.middleMonitor, time / SDKConstant.MILLION_UNIT);
             }
         } catch (Exception e) {
             e.printStackTrace();

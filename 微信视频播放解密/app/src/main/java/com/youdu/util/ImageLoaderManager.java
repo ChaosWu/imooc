@@ -1,8 +1,11 @@
 package com.youdu.util;
 
 import android.content.Context;
+import android.os.Environment;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -10,7 +13,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.youdu.vuandroidadsdk.R;
+import com.youdu.R;
+
+import java.io.File;
 
 /**
  * @author: qndroid
@@ -19,9 +24,10 @@ import com.youdu.vuandroidadsdk.R;
  */
 public class ImageLoaderManager {
 
-    private static final int THREAD_COUNT = 3;
+    private static final int THREAD_COUNT = 4;
     private static final int PRIORITY = 2;
     private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
+    private static final int DISK_CACHE_SIZE = 50 * 1024 * 1024;
     private static final int CONNECTION_TIME_OUT = 5 * 1000;
     private static final int READ_TIME_OUT = 30 * 1000;
 
@@ -48,16 +54,18 @@ public class ImageLoaderManager {
     private ImageLoaderManager(Context context) {
 
         ImageLoaderConfiguration config = new ImageLoaderConfiguration
-            .Builder(context)
-            .threadPoolSize(THREAD_COUNT)
-            .threadPriority(Thread.NORM_PRIORITY - PRIORITY)
-            .denyCacheImageMultipleSizesInMemory()
-            .memoryCache(new UsingFreqLimitedMemoryCache(MEMORY_CACHE_SIZE))
-            .tasksProcessingOrder(QueueProcessingType.LIFO)
-            .defaultDisplayImageOptions(getDefaultOptions())
-            .imageDownloader(new BaseImageDownloader(context, CONNECTION_TIME_OUT, READ_TIME_OUT))
-            .writeDebugLogs()
-            .build();
+                .Builder(context)
+                .threadPoolSize(THREAD_COUNT)
+                .threadPriority(Thread.NORM_PRIORITY - PRIORITY)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new UsingFreqLimitedMemoryCache(MEMORY_CACHE_SIZE))
+                .diskCacheSize(DISK_CACHE_SIZE)
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())//将保存的时候的URI名称用MD5 加密
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .defaultDisplayImageOptions(getDefaultOptions())
+                .imageDownloader(new BaseImageDownloader(context, CONNECTION_TIME_OUT, READ_TIME_OUT))
+                .writeDebugLogs()
+                .build();
 
         ImageLoader.getInstance().init(config);
         mLoader = ImageLoader.getInstance();
@@ -77,10 +85,10 @@ public class ImageLoaderManager {
     private DisplayImageOptions getDefaultOptions() {
 
         DisplayImageOptions options = new
-            DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.drawable.xadsdk_img_error)
-            .showImageOnFail(R.drawable.xadsdk_img_error)
-            .build();
+                DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.default_user_avatar)
+                .showImageOnFail(R.drawable.default_user_avatar)
+                .build();
         return options;
     }
 }

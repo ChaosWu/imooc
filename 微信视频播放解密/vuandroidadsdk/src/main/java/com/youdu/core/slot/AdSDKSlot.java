@@ -10,6 +10,7 @@ import com.youdu.activity.AdBrowserActivity;
 import com.youdu.constant.SDKConstant;
 import com.youdu.core.AdContextParameters;
 import com.youdu.module.AdInstance;
+import com.youdu.module.AdValue;
 import com.youdu.report.ReportManager;
 import com.youdu.util.Utils;
 import com.youdu.widget.CustomVideoView;
@@ -34,13 +35,13 @@ public class AdSDKSlot implements ADVideoPlayerListener {
     /**
      * Data
      */
-    private AdInstance mXAdInstance;
+    private AdValue mXAdInstance;
     private AdSDKSlotListener mSlotListener;
     private boolean canPause = false; //是否可自动暂停标志位
     private boolean isFirst = false;
     private int lastArea = 0; //防止将要滑入滑出时播放器的状态改变
 
-    public AdSDKSlot(AdInstance adInstance,
+    public AdSDKSlot(AdValue adInstance,
                      AdSDKSlotListener slotLitener, ADFrameImageLoadListener frameLoadListener) {
         this.mXAdInstance = adInstance;
         this.mSlotListener = slotLitener;
@@ -53,8 +54,8 @@ public class AdSDKSlot implements ADVideoPlayerListener {
 
         mVideoView = new CustomVideoView(mContext, mParentView);
         if (mXAdInstance != null) {
-            mVideoView.setDataSource(mXAdInstance.values.get(0).resource);
-            mVideoView.setFrameURI(mXAdInstance.values.get(0).thumb);
+            mVideoView.setDataSource(mXAdInstance.resource);
+            mVideoView.setFrameURI(mXAdInstance.thumb);
             mVideoView.setFrameLoadListener(frameImageLoadListener);
             mVideoView.setListener(this);
         }
@@ -93,7 +94,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
                 //发自动暂停监测
                 if (!isPauseBtnClick() && isPlaying()) {
                     try {
-                        ReportManager.pauseVideoReport(mXAdInstance.values.get(0).event.pause.content, getPosition());
+                        ReportManager.pauseVideoReport(mXAdInstance.event.pause.content, getPosition());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -171,7 +172,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
     @Override
     public void onClickFullScreenBtn() {
         try {
-            ReportManager.fullScreenReport(mXAdInstance.values.get(0).event.full.content, getPosition());
+            ReportManager.fullScreenReport(mXAdInstance.event.full.content, getPosition());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,12 +219,12 @@ public class AdSDKSlot implements ADVideoPlayerListener {
 
     @Override
     public void onClickVideo() {
-        String desationUrl = mXAdInstance.values.get(0).clickUrl;
+        String desationUrl = mXAdInstance.clickUrl;
         if (mSlotListener != null) {
             if (mVideoView.isFrameHidden() && !TextUtils.isEmpty(desationUrl)) {
                 mSlotListener.onClickVideo(desationUrl);
                 try {
-                    ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
+                    ReportManager.pauseVideoReport(mXAdInstance.clickMonitor, mVideoView.getCurrentPosition()
                             / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -233,10 +234,10 @@ public class AdSDKSlot implements ADVideoPlayerListener {
             //走默认样式
             if (mVideoView.isFrameHidden() && !TextUtils.isEmpty(desationUrl)) {
                 Intent intent = new Intent(mContext, AdBrowserActivity.class);
-                intent.putExtra(AdBrowserActivity.KEY_URL, mXAdInstance.values.get(0).clickUrl);
+                intent.putExtra(AdBrowserActivity.KEY_URL, mXAdInstance.clickUrl);
                 mContext.startActivity(intent);
                 try {
-                    ReportManager.pauseVideoReport(mXAdInstance.values.get(0).clickMonitor, mVideoView.getCurrentPosition()
+                    ReportManager.pauseVideoReport(mXAdInstance.clickMonitor, mVideoView.getCurrentPosition()
                             / SDKConstant.MILLION_UNIT);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -273,7 +274,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
     @Override
     public void onAdVideoLoadComplete() {
         try {
-            ReportManager.sueReport(mXAdInstance.values.get(0).endMonitor, false, getDuration());
+            ReportManager.sueReport(mXAdInstance.endMonitor, false, getDuration());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -290,7 +291,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
     @Override
     public void onBufferUpdate(int time) {
         try {
-            ReportManager.suReport(mXAdInstance.values.get(0).middleMonitor, time / SDKConstant.MILLION_UNIT);
+            ReportManager.suReport(mXAdInstance.middleMonitor, time / SDKConstant.MILLION_UNIT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -311,7 +312,7 @@ public class AdSDKSlot implements ADVideoPlayerListener {
      */
     private void sendSUSReport(boolean isAuto) {
         try {
-            ReportManager.susReport(mXAdInstance.values.get(0).startMonitor, isAuto);
+            ReportManager.susReport(mXAdInstance.startMonitor, isAuto);
         } catch (Exception e) {
             e.printStackTrace();
         }

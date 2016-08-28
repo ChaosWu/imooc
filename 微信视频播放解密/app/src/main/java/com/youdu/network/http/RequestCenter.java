@@ -1,5 +1,6 @@
 package com.youdu.network.http;
 
+import com.youdu.module.recommand.BaseRecommandModel;
 import com.youdu.module.update.UpdateModel;
 import com.youdu.module.user.User;
 import com.youdu.okhttp.CommonOkHttpClient;
@@ -44,5 +45,10 @@ public class RequestCenter {
     public static void checkVersion(DisposeDataListener listener) {
 
         RequestCenter.postRequest(HttpConstants.CHECK_UPDATE, null, listener, UpdateModel.class);
+    }
+
+    public static void requestRecommandData(DisposeDataListener listener) {
+
+        RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND, null, listener, BaseRecommandModel.class);
     }
 }

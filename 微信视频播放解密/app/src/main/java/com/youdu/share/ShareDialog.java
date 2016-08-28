@@ -45,6 +45,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     private String mShareTileUrl;
     private String mShareSiteUrl;
     private String mShareSite;
+    private String mUrl;
 
 
     public ShareDialog(Context context) {
@@ -103,6 +104,10 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         mShareTileUrl = titleUrl;
     }
 
+    public void setUrl(String url) {
+        mUrl = url;
+    }
+
     public void setShareSiteUrl(String siteUrl) {
         mShareSiteUrl = siteUrl;
     }
@@ -156,6 +161,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         params.setSiteUrl(mShareSiteUrl);
         params.setText(mShareText);
         params.setImagePath(mSharePhoto);
+        params.setUrl(mUrl);
         mData.mPlatformType = platofrm;
         mData.mShareParams = params;
         ShareManager.getInstance().shareData(mData, mListener);

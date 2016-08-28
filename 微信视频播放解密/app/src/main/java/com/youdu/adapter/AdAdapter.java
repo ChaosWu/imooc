@@ -2,7 +2,6 @@ package com.youdu.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,11 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.youdu.R;
 import com.youdu.activity.AdBrowserActivity;
 import com.youdu.constant.Constant;
 import com.youdu.core.AdContextInterface;
 import com.youdu.core.context.AdContext;
+import com.youdu.module.recommand.RecommandValue;
 import com.youdu.share.ShareDialog;
 import com.youdu.util.ImageLoaderManager;
 import com.youdu.util.Utils;
@@ -27,6 +28,7 @@ import com.youdu.util.Utils;
 import java.util.ArrayList;
 
 import cn.sharesdk.framework.Platform;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author: qndroid
@@ -44,12 +46,12 @@ public class AdAdapter extends BaseAdapter {
 
     private LayoutInflater mInflate;
     private Context mContext;
-    private ArrayList<String> mData;
-    private ViewHolder mViewHolder;
+    private ArrayList<RecommandValue> mData;
+    private ViewHolder mViewHolder, mVideoViewHolder, mCardOneHolder, mCardTwoHolder;
     private AdContext mAdsdkContext;
     private ImageLoaderManager mImagerLoader;
 
-    public AdAdapter(Context context, ArrayList<String> data) {
+    public AdAdapter(Context context, ArrayList<RecommandValue> data) {
         mContext = context;
         mData = data;
         mInflate = LayoutInflater.from(mContext);
@@ -78,19 +80,15 @@ public class AdAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-
-        String tag = (String) getItem(position);
-        if (tag.equals("true")) {
-            return VIDOE_TYPE;
-        } else {
-            return CARD_TYPE_ONE;
-        }
+        RecommandValue value = (RecommandValue) getItem(position);
+        return value.type;
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
+        final RecommandValue value = (RecommandValue) getItem(position);
         //无tag时
         if (convertView == null) {
             switch (type) {
@@ -99,11 +97,11 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
                     mViewHolder.mVieoContentLayout = (RelativeLayout)
-                        convertView.findViewById(R.id.video_ad_layout);
+                            convertView.findViewById(R.id.video_ad_layout);
                     mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
                     //为对应布局创建播放器
                     mAdsdkContext = new AdContext(mViewHolder.mVieoContentLayout,
-                        Constant.TES_JSON, null);
+                            new Gson().toJson(value), null);
                     mAdsdkContext.setAdResultListener(new AdContextInterface() {
                         @Override
                         public void onAdSuccess() {
@@ -127,6 +125,7 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_one_layout, parent, false);
                     mViewHolder.mProductPhotoLayout = (LinearLayout) convertView.findViewById(R.id.product_photo_layout);
+                    mViewHolder.mPriceView = (TextView) convertView.findViewById(R.id.item_price_view);
                     mViewHolder.mFromView = (TextView) convertView.findViewById(R.id.item_from_view);
                     mViewHolder.mZanView = (TextView) convertView.findViewById(R.id.item_zan_view);
                     break;
@@ -134,10 +133,12 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_two_layout, parent, false);
                     mViewHolder.mProductView = (ImageView) convertView.findViewById(R.id.product_photo_view);
+                    mViewHolder.mPriceView = (TextView) convertView.findViewById(R.id.item_price_view);
                     mViewHolder.mFromView = (TextView) convertView.findViewById(R.id.item_from_view);
                     mViewHolder.mZanView = (TextView) convertView.findViewById(R.id.item_zan_view);
                     break;
             }
+            mViewHolder.mLogoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
             mViewHolder.mTitleView = (TextView) convertView.findViewById(R.id.item_title_view);
             mViewHolder.mInfoView = (TextView) convertView.findViewById(R.id.item_info_view);
             mViewHolder.mFooterView = (TextView) convertView.findViewById(R.id.item_footer_view);
@@ -157,26 +158,38 @@ public class AdAdapter extends BaseAdapter {
             }
         }
         //填充item的数据
+        mImagerLoader.displayImage(mViewHolder.mLogoView, value.logo);
+        mViewHolder.mTitleView.setText(value.title);
+        mViewHolder.mInfoView.setText(value.info.concat(mContext.getString(R.string.tian_qian)));
+        mViewHolder.mFooterView.setText(value.text);
         switch (type) {
             case VIDOE_TYPE:
                 mViewHolder.mShareView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ShareDialog dialog = new ShareDialog(mContext);
-                        dialog.setShareType(Platform.SHARE_IMAGE);
-                        dialog.setShareTitle("周杰伦");
-                        dialog.setShareText("我很忙");
-                        dialog.setImagePhoto(Environment.getExternalStorageDirectory() + "/test2.jpg");
+                        dialog.setShareType(Platform.SHARE_VIDEO);
+                        dialog.setShareTitle(value.title);
+                        dialog.setShareText(value.text);
+                        dialog.setUrl(value.resource);
                         dialog.show();
                     }
                 });
                 break;
             case CARD_TYPE_ONE:
-                //主要是往linearlaout中去添加创建好的ImageView.
+                mViewHolder.mPriceView.setText(value.price);
+                mViewHolder.mFromView.setText(value.from);
+                mViewHolder.mZanView.setText(mContext.getString(R.string.dian_zan).concat(value.zan));
+//                for (String url : value.url) {
+//                    mViewHolder.mProductPhotoLayout.addView(createImageView(url));
+//                }
                 break;
             case CARD_TYPE_TWO:
-                //为ImageView加载远程图片
-                mImagerLoader.displayImage(mViewHolder.mProductView, "");
+                mViewHolder.mPriceView.setText(value.price);
+                mViewHolder.mFromView.setText(value.from);
+                mViewHolder.mZanView.setText(mContext.getString(R.string.dian_zan).concat(value.zan));
+                //为单个ImageView加载远程图片
+                mImagerLoader.displayImage(mViewHolder.mProductView, value.url.get(0));
                 break;
         }
         return convertView;
@@ -200,6 +213,7 @@ public class AdAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         //所有Card共有属性
+        private CircleImageView mLogoView;
         private TextView mTitleView;
         private TextView mInfoView;
         private TextView mFooterView;
@@ -208,6 +222,7 @@ public class AdAdapter extends BaseAdapter {
         private ImageView mShareView;
 
         //Video Card外有Card具有属性
+        private TextView mPriceView;
         private TextView mFromView;
         private TextView mZanView;
         //Card One特有属性
@@ -215,6 +230,4 @@ public class AdAdapter extends BaseAdapter {
         //Card Two特有属性
         private ImageView mProductView;
     }
-
-
 }

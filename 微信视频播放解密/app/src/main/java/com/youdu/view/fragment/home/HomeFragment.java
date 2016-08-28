@@ -2,14 +2,15 @@ package com.youdu.view.fragment.home;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +20,16 @@ import com.youdu.activity.AdBrowserActivity;
 import com.youdu.activity.SearchActivity;
 import com.youdu.adapter.AdAdapter;
 import com.youdu.constant.Constant;
+import com.youdu.module.recommand.BaseRecommandModel;
+import com.youdu.network.http.RequestCenter;
+import com.youdu.okhttp.listener.DisposeDataListener;
 import com.youdu.share.ShareDialog;
 import com.youdu.view.fragment.BaseFragment;
 import com.youdu.zxing.app.CaptureActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
 
 
 /**
@@ -39,7 +41,7 @@ import cn.sharesdk.framework.PlatformActionListener;
  * @文件描述：完全是普通的Fragment
  * @修改历史：2015年10月2日创建初始版本 ********************************************************
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener, PlatformActionListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener {
 
     private static final int REQUEST_QRCODE = 0x01;
     /**
@@ -50,14 +52,22 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private TextView mQRCodeView;
     private TextView mCategoryView;
     private TextView mSearchView;
+    private ImageView mLoadingView;
     /**
      * data
      */
     private ArrayList<String> mData;
     private AdAdapter mAdapter;
+    private BaseRecommandModel mRecommandData;
 
     public HomeFragment() {
-        initData();
+        //initData();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestRecommandData();
     }
 
     @Override
@@ -76,19 +86,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mSearchView = (TextView) mContentView.findViewById(R.id.search_view);
         mSearchView.setOnClickListener(this);
         mListView = (ListView) mContentView.findViewById(R.id.list_view);
-        mAdapter = new AdAdapter(this.getActivity(), mData);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnScrollListener(new OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                mAdapter.updateAdInScrollView();
-            }
-        });
+        mLoadingView = (ImageView) mContentView.findViewById(R.id.loading_view);
+        AnimationDrawable anim = (AnimationDrawable) mLoadingView.getDrawable();
+        anim.start();
     }
 
     private void initData() {
@@ -103,6 +103,50 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mData.add("false");
         mData.add("false");
         mData.add("false");
+    }
+
+    //发送推荐产品请求
+    private void requestRecommandData() {
+        RequestCenter.requestRecommandData(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                mRecommandData = (BaseRecommandModel) responseObj;
+                //更新UI
+                showSuccessView();
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+                //显示请求失败View
+                showErrorView();
+            }
+        });
+    }
+
+    //显示请求成功UI
+    private void showSuccessView() {
+        if (mRecommandData.data.list != null && mRecommandData.data.list.size() > 0) {
+            mLoadingView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+            mAdapter = new AdAdapter(mContext, mRecommandData.data.list);
+            mListView.setAdapter(mAdapter);
+            mListView.setOnScrollListener(new OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    mAdapter.updateAdInScrollView();
+                }
+            });
+        } else {
+            showErrorView();
+        }
+    }
+
+    private void showErrorView() {
     }
 
     @Override
@@ -154,18 +198,4 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
-    @Override
-    public void onCancel(Platform arg0, int arg1) {
-        Log.e("------------->", "cancel");
-    }
-
-    @Override
-    public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
-        Log.e("------------->", arg0.getName() + "arg1:" + arg1);
-    }
-
-    @Override
-    public void onError(Platform arg0, int arg1, Throwable arg2) {
-        Log.e("----->onError", arg2.getMessage());
-    }
 }
