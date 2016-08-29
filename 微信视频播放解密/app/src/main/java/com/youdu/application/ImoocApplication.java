@@ -2,6 +2,8 @@ package com.youdu.application;
 
 import android.app.Application;
 
+import com.iflytek.cloud.SpeechUtility;
+import com.youdu.R;
 import com.youdu.share.ShareManager;
 
 import cn.jpush.android.api.JPushInterface;
@@ -22,10 +24,12 @@ public class ImoocApplication extends Application {
 
     @Override
     public void onCreate() {
+        initSpeech();
         super.onCreate();
         mApplication = this;
         initShareSDK();
         initJPush();
+
     }
 
     public static ImoocApplication getInstance() {
@@ -39,5 +43,9 @@ public class ImoocApplication extends Application {
     private void initJPush() {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+    }
+
+    private void initSpeech() {
+        SpeechUtility.createUtility(this, "appid=" + getString(R.string.app_id));
     }
 }
