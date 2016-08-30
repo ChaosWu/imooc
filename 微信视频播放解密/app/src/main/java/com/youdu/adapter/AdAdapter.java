@@ -155,7 +155,10 @@ public class AdAdapter extends BaseAdapter {
                         ShareDialog dialog = new ShareDialog(mContext);
                         dialog.setShareType(Platform.SHARE_VIDEO);
                         dialog.setShareTitle(value.title);
+                        dialog.setShareTitleUrl(value.site);
                         dialog.setShareText(value.text);
+                        dialog.setShareSite(value.title);
+                        dialog.setShareTitle(value.site);
                         dialog.setUrl(value.resource);
                         dialog.show();
                     }
