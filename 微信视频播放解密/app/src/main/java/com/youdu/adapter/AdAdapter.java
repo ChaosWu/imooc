@@ -6,24 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.youdu.R;
 import com.youdu.activity.AdBrowserActivity;
-import com.youdu.constant.Constant;
 import com.youdu.core.AdContextInterface;
 import com.youdu.core.context.AdContext;
 import com.youdu.module.recommand.RecommandValue;
 import com.youdu.share.ShareDialog;
 import com.youdu.util.ImageLoaderManager;
-import com.youdu.util.Utils;
 
 import java.util.ArrayList;
 
@@ -47,7 +42,7 @@ public class AdAdapter extends BaseAdapter {
     private LayoutInflater mInflate;
     private Context mContext;
     private ArrayList<RecommandValue> mData;
-    private ViewHolder mViewHolder, mVideoViewHolder, mCardOneHolder, mCardTwoHolder;
+    private ViewHolder mViewHolder;
     private AdContext mAdsdkContext;
     private ImageLoaderManager mImagerLoader;
 
@@ -97,20 +92,18 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
                     mViewHolder.mVieoContentLayout = (RelativeLayout)
-                            convertView.findViewById(R.id.video_ad_layout);
+                        convertView.findViewById(R.id.video_ad_layout);
                     mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
                     //为对应布局创建播放器
                     mAdsdkContext = new AdContext(mViewHolder.mVieoContentLayout,
-                            new Gson().toJson(value), null);
+                        new Gson().toJson(value), null);
                     mAdsdkContext.setAdResultListener(new AdContextInterface() {
                         @Override
                         public void onAdSuccess() {
-
                         }
 
                         @Override
                         public void onAdFailed() {
-
                         }
 
                         @Override
@@ -124,10 +117,12 @@ public class AdAdapter extends BaseAdapter {
                 case CARD_TYPE_ONE:
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_one_layout, parent, false);
-                    mViewHolder.mProductPhotoLayout = (LinearLayout) convertView.findViewById(R.id.product_photo_layout);
                     mViewHolder.mPriceView = (TextView) convertView.findViewById(R.id.item_price_view);
                     mViewHolder.mFromView = (TextView) convertView.findViewById(R.id.item_from_view);
                     mViewHolder.mZanView = (TextView) convertView.findViewById(R.id.item_zan_view);
+                    mViewHolder.mProductOneView = (ImageView) convertView.findViewById(R.id.product_view_one);
+                    mViewHolder.mProductTwoView = (ImageView) convertView.findViewById(R.id.product_view_two);
+                    mViewHolder.mProductThreeView = (ImageView) convertView.findViewById(R.id.product_view_three);
                     break;
                 case CARD_TYPE_TWO:
                     mViewHolder = new ViewHolder();
@@ -145,17 +140,7 @@ public class AdAdapter extends BaseAdapter {
             convertView.setTag(mViewHolder);
         }//有tag时
         else {
-            switch (type) {
-                case VIDOE_TYPE:
-                    mViewHolder = (ViewHolder) convertView.getTag();
-                    break;
-                case CARD_TYPE_ONE:
-                    mViewHolder = (ViewHolder) convertView.getTag();
-                    break;
-                case CARD_TYPE_TWO:
-                    mViewHolder = (ViewHolder) convertView.getTag();
-                    break;
-            }
+            mViewHolder = (ViewHolder) convertView.getTag();
         }
         //填充item的数据
         mImagerLoader.displayImage(mViewHolder.mLogoView, value.logo);
@@ -180,9 +165,10 @@ public class AdAdapter extends BaseAdapter {
                 mViewHolder.mPriceView.setText(value.price);
                 mViewHolder.mFromView.setText(value.from);
                 mViewHolder.mZanView.setText(mContext.getString(R.string.dian_zan).concat(value.zan));
-//                for (String url : value.url) {
-//                    mViewHolder.mProductPhotoLayout.addView(createImageView(url));
-//                }
+                //为类型1的三个imageview加载远程图片。
+                mImagerLoader.displayImage(mViewHolder.mProductOneView, value.url.get(0));
+                mImagerLoader.displayImage(mViewHolder.mProductTwoView, value.url.get(1));
+                mImagerLoader.displayImage(mViewHolder.mProductThreeView, value.url.get(2));
                 break;
             case CARD_TYPE_TWO:
                 mViewHolder.mPriceView.setText(value.price);
@@ -193,15 +179,6 @@ public class AdAdapter extends BaseAdapter {
                 break;
         }
         return convertView;
-    }
-
-    private ImageView createImageView(String url) {
-        ImageView photoView = new ImageView(mContext);
-        ViewGroup.MarginLayoutParams params = new MarginLayoutParams(Utils.dip2px(mContext, 80), LayoutParams.MATCH_PARENT);
-        params.rightMargin = Utils.dip2px(mContext, 5);
-        photoView.setLayoutParams(params);
-        mImagerLoader.displayImage(photoView, url);
-        return photoView;
     }
 
     //自动播放方法
@@ -221,12 +198,14 @@ public class AdAdapter extends BaseAdapter {
         private RelativeLayout mVieoContentLayout;
         private ImageView mShareView;
 
-        //Video Card外有Card具有属性
+        //Video Card外所有Card具有属性
         private TextView mPriceView;
         private TextView mFromView;
         private TextView mZanView;
         //Card One特有属性
-        private LinearLayout mProductPhotoLayout;
+        private ImageView mProductOneView;
+        private ImageView mProductTwoView;
+        private ImageView mProductThreeView;
         //Card Two特有属性
         private ImageView mProductView;
     }
