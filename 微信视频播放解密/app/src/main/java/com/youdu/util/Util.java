@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
@@ -63,5 +64,10 @@ public class Util {
             e.printStackTrace();
         }
         return versionCode;
+    }
+
+    public static Uri createQQUrl(String qq) {
+        String result = "mqqwpa://im/chat?chat_type=wpa&uin=".concat(qq);
+        return Uri.parse(result);
     }
 }
