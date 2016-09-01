@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 /**
  * @author renzhiqiang
- * @description 基金收索页面
+ * @description 产品搜索页面
  * @date 2015年8月19日
  */
 public class SearchActivity extends BaseActivity implements OnClickListener, OnItemClickListener {
@@ -78,20 +78,20 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
         cancelView = (TextView) findViewById(R.id.cancel_view);
         historyLayout = (LinearLayout) findViewById(R.id.fund_history_layout);
         clearHistoryView = (TextView) historyLayout
-            .findViewById(R.id.delect_histroy_view);
+                .findViewById(R.id.delect_histroy_view);
         historyListView = (ListView) historyLayout
-            .findViewById(R.id.history_list_view);
+                .findViewById(R.id.history_list_view);
         historyListView.setOnItemClickListener(this);
         // 空间面View
         emptyLayout = (LinearLayout) findViewById(R.id.empty_layout);
         // 正在搜索View
         searchingLayout = (LinearLayout) findViewById(R.id.fund_search_layout);
         searchingListView = (ListView) searchingLayout
-            .findViewById(R.id.fund_list_view);
+                .findViewById(R.id.fund_list_view);
         searchingEmptyLayout = (LinearLayout) searchingLayout
-            .findViewById(R.id.fund_search_empty_layout);
+                .findViewById(R.id.fund_search_empty_layout);
         searchNoView = (TextView) searchingEmptyLayout
-            .findViewById(R.id.seach_no_fund_info);
+                .findViewById(R.id.seach_no_fund_info);
         searchingListView.setEmptyView(searchingEmptyLayout);
         searchingListView.setOnItemClickListener(this);
         cancelView.setOnClickListener(this);
@@ -121,17 +121,17 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
                  * 重数据库中模糊查询匹赔基金
                  */
                 searchingListData = DBDataHelper
-                    .getInstance()
-                    .select(DBHelper.FUND_LIST_TABLE,
-                        "fdcode like ? or abbrev like ? or spell like ?",
-                        new String[]{"%" + selections + "%",
-                            "%" + selections + "%",
-                            "%" + selections + "%"}, null,
-                        ProductModel.class);
+                        .getInstance()
+                        .select(DBHelper.FUND_LIST_TABLE,
+                                "fdcode like ? or abbrev like ? or spell like ?",
+                                new String[]{"%" + selections + "%",
+                                        "%" + selections + "%",
+                                        "%" + selections + "%"}, null,
+                                ProductModel.class);
 
                 if (searchingAdapter == null) {
                     searchingAdapter = new SearchAdapter(
-                        SearchActivity.this, searchingListData);
+                            SearchActivity.this, searchingListData);
                     searchingListView.setAdapter(searchingAdapter);
                 } else {
                     searchingAdapter.updateData(searchingListData);
@@ -167,7 +167,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
                 break;
             case R.id.fund_list_view:
                 fundModel = (ProductModel) searchingAdapter
-                    .getItem(position);
+                        .getItem(position);
                 insertHistoryTable();
                 break;
         }
@@ -186,27 +186,27 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
 
     private void insertHistoryTable() {
         if (DBDataHelper
-            .getInstance()
-            .select(DBHelper.FUND_BROWSE_TABLE, "fdcode = ?",
-                new String[]{fundModel.fdcode}, null,
-                ProductModel.class).size() == 0) {
+                .getInstance()
+                .select(DBHelper.FUND_BROWSE_TABLE, "fdcode = ?",
+                        new String[]{fundModel.fdcode}, null,
+                        ProductModel.class).size() == 0) {
             if (getHistoryData() < MAX_HISTORY_RECORD) {
                 fundModel.time = String.valueOf(System.currentTimeMillis());
                 DBDataHelper.getInstance().insert(DBHelper.FUND_BROWSE_TABLE,
-                    fundModel);
+                        fundModel);
             } else {
                 DBDataHelper.getInstance().delete(
-                    DBHelper.FUND_BROWSE_TABLE,
-                    "id = (select min(id) from "
-                        + DBHelper.FUND_BROWSE_TABLE + ")", null);
+                        DBHelper.FUND_BROWSE_TABLE,
+                        "id = (select min(id) from "
+                                + DBHelper.FUND_BROWSE_TABLE + ")", null);
                 fundModel.time = String.valueOf(System.currentTimeMillis());
                 DBDataHelper.getInstance().insert(DBHelper.FUND_BROWSE_TABLE,
-                    fundModel);
+                        fundModel);
             }
         } else {
             fundModel.time = String.valueOf(System.currentTimeMillis());
             DBDataHelper.getInstance().update(DBHelper.FUND_BROWSE_TABLE,
-                "fdcode = ?", new String[]{fundModel.fdcode}, fundModel);
+                    "fdcode = ?", new String[]{fundModel.fdcode}, fundModel);
         }
     }
 
@@ -219,8 +219,8 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
         historyLayout.setVisibility(View.VISIBLE);
 
         historyListData = DBDataHelper.getInstance().select(
-            DBHelper.FUND_BROWSE_TABLE, null, null,
-            DBHelper.TIME + DBHelper.DESC, ProductModel.class);
+                DBHelper.FUND_BROWSE_TABLE, null, null,
+                DBHelper.TIME + DBHelper.DESC, ProductModel.class);
         if (historyAdapter == null) {
             historyAdapter = new SearchAdapter(this, historyListData);
             historyListView.setAdapter(historyAdapter);
@@ -234,7 +234,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
      */
     private void entryEmptyMode() {
         DBDataHelper.getInstance().delete(DBHelper.FUND_BROWSE_TABLE, null,
-            null);
+                null);
         searchingLayout.setVisibility(View.GONE);
         historyLayout.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
@@ -251,17 +251,17 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
 
     private int getHistoryData() {
         return DBDataHelper
-            .getInstance()
-            .select(DBHelper.FUND_BROWSE_TABLE, null, null, null,
-                ProductModel.class).size();
+                .getInstance()
+                .select(DBHelper.FUND_BROWSE_TABLE, null, null, null,
+                        ProductModel.class).size();
     }
 
     private String getNoFundInfo(String info) {
         String sourceInfo = "<font color= #666666>"
-            + getString(R.string.search_no_title) + "</font>"
-            + "<font color= #ff3b3b>" + info + "</font>"
-            + "<font color= #666666>" + getString(R.string.search_no_end)
-            + "</font>";
+                + getString(R.string.search_no_title) + "</font>"
+                + "<font color= #ff3b3b>" + info + "</font>"
+                + "<font color= #666666>" + getString(R.string.search_no_end)
+                + "</font>";
         return sourceInfo;
     }
 }

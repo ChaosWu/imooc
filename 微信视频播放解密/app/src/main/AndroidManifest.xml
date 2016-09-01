@@ -87,6 +87,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.PhotoViewActivity"/>
         <!--本地产品更新列表服务 -->
         <service android:name=".service.UpdateProductService"/>
         <service android:name=".network.mina.MinaService"/>

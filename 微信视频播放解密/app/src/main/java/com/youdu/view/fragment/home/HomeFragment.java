@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,17 +18,17 @@ import android.widget.Toast;
 
 import com.youdu.R;
 import com.youdu.activity.AdBrowserActivity;
+import com.youdu.activity.PhotoViewActivity;
 import com.youdu.activity.SearchActivity;
 import com.youdu.adapter.AdAdapter;
 import com.youdu.constant.Constant;
 import com.youdu.module.recommand.BaseRecommandModel;
+import com.youdu.module.recommand.RecommandValue;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.okhttp.listener.DisposeDataListener;
 import com.youdu.share.ShareDialog;
 import com.youdu.view.fragment.BaseFragment;
 import com.youdu.zxing.app.CaptureActivity;
-
-import java.util.ArrayList;
 
 import cn.sharesdk.framework.Platform;
 
@@ -41,7 +42,7 @@ import cn.sharesdk.framework.Platform;
  * @文件描述：完全是普通的Fragment
  * @修改历史：2015年10月2日创建初始版本 ********************************************************
  */
-public class HomeFragment extends BaseFragment implements View.OnClickListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private static final int REQUEST_QRCODE = 0x01;
     /**
@@ -56,7 +57,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
     /**
      * data
      */
-    private ArrayList<String> mData;
     private AdAdapter mAdapter;
     private BaseRecommandModel mRecommandData;
 
@@ -86,23 +86,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
         mSearchView = (TextView) mContentView.findViewById(R.id.search_view);
         mSearchView.setOnClickListener(this);
         mListView = (ListView) mContentView.findViewById(R.id.list_view);
+        mListView.setOnItemClickListener(this);
         mLoadingView = (ImageView) mContentView.findViewById(R.id.loading_view);
         AnimationDrawable anim = (AnimationDrawable) mLoadingView.getDrawable();
         anim.start();
-    }
-
-    private void initData() {
-        mData = new ArrayList<>();
-        mData.add("false");
-        mData.add("true");
-        mData.add("false");
-        mData.add("false");
-        mData.add("false");
-        mData.add("false");// 代表要显示广告
-        mData.add("false");
-        mData.add("false");
-        mData.add("false");
-        mData.add("false");
     }
 
     //发送推荐产品请求
@@ -133,7 +120,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
             mListView.setOnScrollListener(new OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
-
                 }
 
                 @Override
@@ -171,6 +157,16 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);
                 mContext.startActivity(searchIntent);
                 break;
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        RecommandValue value = (RecommandValue) mAdapter.getItem(position);
+        if (value.type != 0) {
+            Intent intent = new Intent(mContext, PhotoViewActivity.class);
+            intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST, value.url);
+            startActivity(intent);
         }
     }
 
