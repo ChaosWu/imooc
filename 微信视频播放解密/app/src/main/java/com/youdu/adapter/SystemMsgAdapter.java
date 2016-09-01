@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @文件名称：SystemMsgAdapter.java
  * @文件作者：renzhiqiang
  * @创建时间：2015年6月11日 下午2:21:33
- * @文件描述：基金列表适配器
+ * @文件描述：消息列表适配器
  * @修改历史：2015年6月11日创建初始版本 ********************************************************
  */
 public class SystemMsgAdapter extends BaseAdapter {
@@ -64,7 +64,7 @@ public class SystemMsgAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_message_card_layout, null);
             holder.mDayView = (TextView) convertView.findViewById(R.id.time_view);
             holder.mSiteView = (TextView) convertView.findViewById(R.id.site_view);
-            holder.mPhotoView = (CircleImageView) convertView.findViewById(R.id.photo_view);
+            holder.mPhotoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
             holder.mTitleView = (TextView) convertView.findViewById(R.id.title_view);
             holder.mInfoView = (TextView) convertView.findViewById(R.id.info_view);
             holder.mImageView = (ImageView) convertView.findViewById(R.id.image_view);

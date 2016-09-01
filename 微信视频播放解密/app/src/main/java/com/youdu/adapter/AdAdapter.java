@@ -8,17 +8,20 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.youdu.R;
 import com.youdu.activity.AdBrowserActivity;
+import com.youdu.activity.PhotoViewActivity;
 import com.youdu.core.AdContextInterface;
 import com.youdu.core.context.AdContext;
 import com.youdu.module.recommand.RecommandValue;
 import com.youdu.share.ShareDialog;
 import com.youdu.util.ImageLoaderManager;
+import com.youdu.util.Utils;
 
 import java.util.ArrayList;
 
@@ -92,11 +95,11 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
                     mViewHolder.mVieoContentLayout = (RelativeLayout)
-                        convertView.findViewById(R.id.video_ad_layout);
+                            convertView.findViewById(R.id.video_ad_layout);
                     mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
                     //为对应布局创建播放器
                     mAdsdkContext = new AdContext(mViewHolder.mVieoContentLayout,
-                        new Gson().toJson(value), null);
+                            new Gson().toJson(value), null);
                     mAdsdkContext.setAdResultListener(new AdContextInterface() {
                         @Override
                         public void onAdSuccess() {
@@ -120,9 +123,7 @@ public class AdAdapter extends BaseAdapter {
                     mViewHolder.mPriceView = (TextView) convertView.findViewById(R.id.item_price_view);
                     mViewHolder.mFromView = (TextView) convertView.findViewById(R.id.item_from_view);
                     mViewHolder.mZanView = (TextView) convertView.findViewById(R.id.item_zan_view);
-                    mViewHolder.mProductOneView = (ImageView) convertView.findViewById(R.id.product_view_one);
-                    mViewHolder.mProductTwoView = (ImageView) convertView.findViewById(R.id.product_view_two);
-                    mViewHolder.mProductThreeView = (ImageView) convertView.findViewById(R.id.product_view_three);
+                    mViewHolder.mProductLayout = (LinearLayout) convertView.findViewById(R.id.product_photo_layout);
                     break;
                 case CARD_TYPE_TWO:
                     mViewHolder = new ViewHolder();
@@ -168,10 +169,19 @@ public class AdAdapter extends BaseAdapter {
                 mViewHolder.mPriceView.setText(value.price);
                 mViewHolder.mFromView.setText(value.from);
                 mViewHolder.mZanView.setText(mContext.getString(R.string.dian_zan).concat(value.zan));
-                //为类型1的三个imageview加载远程图片。
-                mImagerLoader.displayImage(mViewHolder.mProductOneView, value.url.get(0));
-                mImagerLoader.displayImage(mViewHolder.mProductTwoView, value.url.get(1));
-                mImagerLoader.displayImage(mViewHolder.mProductThreeView, value.url.get(2));
+                mViewHolder.mProductLayout.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, PhotoViewActivity.class);
+                        intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST, value.url);
+                        mContext.startActivity(intent);
+                    }
+                });
+                mViewHolder.mProductLayout.removeAllViews();
+                //动态添加多个imageview
+                for (String url : value.url) {
+                    mViewHolder.mProductLayout.addView(createImageView(url));
+                }
                 break;
             case CARD_TYPE_TWO:
                 mViewHolder.mPriceView.setText(value.price);
@@ -191,6 +201,17 @@ public class AdAdapter extends BaseAdapter {
         }
     }
 
+    private ImageView createImageView(String url) {
+        ImageView photoView = new ImageView(mContext);
+        LinearLayout.LayoutParams params = new LinearLayout.
+                LayoutParams(Utils.dip2px(mContext, 100),
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.leftMargin = Utils.dip2px(mContext, 5);
+        photoView.setLayoutParams(params);
+        mImagerLoader.displayImage(photoView, url);
+        return photoView;
+    }
+
     private static class ViewHolder {
         //所有Card共有属性
         private CircleImageView mLogoView;
@@ -206,9 +227,7 @@ public class AdAdapter extends BaseAdapter {
         private TextView mFromView;
         private TextView mZanView;
         //Card One特有属性
-        private ImageView mProductOneView;
-        private ImageView mProductTwoView;
-        private ImageView mProductThreeView;
+        private LinearLayout mProductLayout;
         //Card Two特有属性
         private ImageView mProductView;
     }

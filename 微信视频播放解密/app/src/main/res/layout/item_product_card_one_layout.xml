@@ -50,42 +50,30 @@
         android:textSize="16sp"
     />
 
-    <LinearLayout
-        android:id="@+id/product_photo_layout"
+    <HorizontalScrollView
+        android:id="@+id/item_product_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_below="@id/item_logo_view"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="5dp"
-        android:orientation="horizontal"
+        android:scrollbars="none"
     >
 
-        <ImageView
-            android:id="@+id/product_view_one"
-            android:layout_width="100dp"
+        <LinearLayout
+            android:id="@+id/product_photo_layout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-        />
-
-        <ImageView
-            android:id="@+id/product_view_two"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="9dp"
-        />
-
-        <ImageView
-            android:id="@+id/product_view_three"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="9dp"
-        />
-    </LinearLayout>
+            android:orientation="horizontal"
+        >
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/item_footer_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/product_photo_layout"
+        android:layout_below="@id/item_product_layout"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="12dp"
         android:ellipsize="end"

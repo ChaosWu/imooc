@@ -25,7 +25,7 @@ import com.youdu.view.fragment.BaseFragment;
 
 /**
  * @author: vision
- * @function:
+ * @function: 消息Fragment
  * @date: 16/7/14
  */
 public class MessageFragment extends BaseFragment implements OnClickListener {
@@ -108,20 +108,22 @@ public class MessageFragment extends BaseFragment implements OnClickListener {
     private void gotoMessageActivity(int type) {
         if (UserManager.getInstance().hasLogined()) {
             Intent intent = new Intent(mContext, MessageActivity.class);
-            intent.putExtra(MessageActivity.DATA_LIST, mData.data.values);
-            intent.putExtra(MessageActivity.TYPE, type);
-            startActivity(intent);
             switch (type) {
                 case 1:
+                    intent.putExtra(MessageActivity.DATA_LIST, mData.data.msgValues);
                     mTipMsgView.setVisibility(View.GONE);
                     break;
                 case 2:
+                    intent.putExtra(MessageActivity.DATA_LIST, mData.data.zanValues);
                     mTipZanView.setVisibility(View.GONE);
                     break;
                 case 3:
+                    intent.putExtra(MessageActivity.DATA_LIST, mData.data.systemValues);
                     mTipView.setVisibility(View.GONE);
                     break;
             }
+            intent.putExtra(MessageActivity.TYPE, type);
+            startActivity(intent);
         } else {
             //去登陆
             startActivity(new Intent(mContext, LoginActivity.class));
@@ -131,14 +133,14 @@ public class MessageFragment extends BaseFragment implements OnClickListener {
     private void registerBroadcast() {
 
         IntentFilter filter =
-            new IntentFilter(ConnectionManager.BROADCAST_ACTION);
+                new IntentFilter(ConnectionManager.BROADCAST_ACTION);
         LocalBroadcastManager.getInstance(mContext)
-            .registerReceiver(mReceiver, filter);
+                .registerReceiver(mReceiver, filter);
     }
 
     private void unregisterBroadcast() {
         LocalBroadcastManager.getInstance(mContext)
-            .unregisterReceiver(mReceiver);
+                .unregisterReceiver(mReceiver);
     }
 
     //真正的处理mina消息
@@ -146,19 +148,28 @@ public class MessageFragment extends BaseFragment implements OnClickListener {
         String message = intent.getStringExtra(ConnectionManager.MESSAGE);
         Log.e("MessageFragment", message);
         mData = (MinaModel) ResponseEntityToModule.
-            parseJsonToModule(message, MinaModel.class);
+                parseJsonToModule(message, MinaModel.class);
         //要改成三个界面都更新
         if (mData != null) {
-            switch (mData.data.key) {
-                case Constant.IMOOC_MSG: // 表明收到的是imooc的消息
-                    if (mData.data.values != null && mData.data.values.size() > 0) {
-                        mTipView.setVisibility(View.VISIBLE);
-                        mTipView.setText(String.valueOf(mData.data.values.size()));
-                    } else {
-                        mTipView.setVisibility(View.GONE);
-                    }
-                    break;
-                // 其它消息类似处理
+            if (mData.data.msgValues != null && mData.data.msgValues.size() > 0) {
+                mTipMsgView.setVisibility(View.VISIBLE);
+                mTipMsgView.setText(String.valueOf(mData.data.msgValues.size()));
+            } else {
+                mTipMsgView.setVisibility(View.GONE);
+            }
+
+            if (mData.data.zanValues != null && mData.data.zanValues.size() > 0) {
+                mTipZanView.setVisibility(View.VISIBLE);
+                mTipZanView.setText(String.valueOf(mData.data.zanValues.size()));
+            } else {
+                mTipZanView.setVisibility(View.GONE);
+            }
+
+            if (mData.data.systemValues != null && mData.data.systemValues.size() > 0) {
+                mTipView.setVisibility(View.VISIBLE);
+                mTipView.setText(String.valueOf(mData.data.systemValues.size()));
+            } else {
+                mTipView.setVisibility(View.GONE);
             }
         }
     }

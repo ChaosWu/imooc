@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class MinaContent extends BaseModel {
 
-    public String key;
-    public ArrayList<MinaMessage> values;
+    public ArrayList<MinaMessage> systemValues;
+    public ArrayList<MinaMessage> zanValues;
+    public ArrayList<MinaMessage> msgValues;
 }
