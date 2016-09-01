@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +22,11 @@ import com.youdu.constant.Constant;
 import com.youdu.module.recommand.BaseRecommandModel;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.okhttp.listener.DisposeDataListener;
-import com.youdu.share.ShareDialog;
+import com.youdu.util.Util;
 import com.youdu.view.fragment.BaseFragment;
 import com.youdu.zxing.app.CaptureActivity;
 
 import java.util.ArrayList;
-
-import cn.sharesdk.framework.Platform;
 
 
 /**
@@ -160,12 +157,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case R.id.category_view:
-                ShareDialog dialog = new ShareDialog(mContext);
-                dialog.setShareType(Platform.SHARE_IMAGE);
-                dialog.setShareTitle("周杰伦");
-                dialog.setShareText("我很忙");
-                dialog.setImagePhoto(Environment.getExternalStorageDirectory() + "/test2.jpg");
-                dialog.show();
+                //与我交谈
+                Intent intent2 = new Intent(Intent.ACTION_VIEW, Util.createQQUrl("277451977"));
+                intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent2);
                 break;
             case R.id.search_view:
                 Intent searchIntent = new Intent(mContext, SearchActivity.class);

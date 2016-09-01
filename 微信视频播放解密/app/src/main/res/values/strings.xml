@@ -47,6 +47,11 @@
     <string name="jpush_message_content">消息内容:</string>
     <string name="jpush_message_title">推送消息</string>
     <string name="video">视频</string>
+    <string name="xitong_message">系统消息</string>
+    <string name="receive_zan_message">收到的赞</string>
+    <string name="liuyan_message">留言</string>
+    <string name="chart_with_me">与我交谈</string>
+    <string name="scan_detail">查看详情</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>
