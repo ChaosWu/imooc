@@ -15,6 +15,7 @@ import android.widget.TextView;
  * @author majinxin
  * @date 2015年8月20日
  */
+
 public class CenterTextView extends TextView
 {
     private StaticLayout myStaticLayout;

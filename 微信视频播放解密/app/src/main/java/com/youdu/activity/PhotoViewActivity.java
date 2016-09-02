@@ -53,7 +53,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
         mDownloadView = (ImageView) findViewById(R.id.download_view);
         mDownloadView.setOnClickListener(this);
         mPager = (ViewPager) findViewById(R.id.photo_pager);
-        mAdapter = new PhotoPagerAdapter(this, mPhotoLists);
+        mAdapter = new PhotoPagerAdapter(this, mPhotoLists, false);
         mPager.setAdapter(mAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -63,7 +63,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPageSelected(int position) {
                 mIndictorView.setText(String.valueOf((position + 1)).concat("/").
-                        concat(String.valueOf(mLenght)));
+                    concat(String.valueOf(mLenght)));
             }
 
             @Override

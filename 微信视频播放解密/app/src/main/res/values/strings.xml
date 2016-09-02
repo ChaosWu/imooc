@@ -52,6 +52,8 @@
     <string name="liuyan_message">留言</string>
     <string name="chart_with_me">与我交谈</string>
     <string name="scan_detail">查看详情</string>
+    <string name="today_zuixing">------------&#062;&#062;今日最新&#060;&#060;------------</string>
+    <string name="history_hot">------------&#062;&#062;历史最热&#060;&#060;------------</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>

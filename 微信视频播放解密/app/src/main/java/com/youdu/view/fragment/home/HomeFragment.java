@@ -27,9 +27,8 @@ import com.youdu.network.http.RequestCenter;
 import com.youdu.okhttp.listener.DisposeDataListener;
 import com.youdu.util.Util;
 import com.youdu.view.fragment.BaseFragment;
+import com.youdu.view.home.HomeHeaderLayout;
 import com.youdu.zxing.app.CaptureActivity;
-import cn.sharesdk.framework.Platform;
-import java.util.ArrayList;
 
 
 /**
@@ -113,6 +112,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         if (mRecommandData.data.list != null && mRecommandData.data.list.size() > 0) {
             mLoadingView.setVisibility(View.GONE);
             mListView.setVisibility(View.VISIBLE);
+            //为listview添加头
+            mListView.addHeaderView(new HomeHeaderLayout(mContext, mRecommandData.data.head));
             mAdapter = new AdAdapter(mContext, mRecommandData.data.list);
             mListView.setAdapter(mAdapter);
             mListView.setOnScrollListener(new OnScrollListener() {
@@ -158,7 +159,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        RecommandValue value = (RecommandValue) mAdapter.getItem(position);
+        RecommandValue value = (RecommandValue) mAdapter.getItem(position - mListView.getHeaderViewsCount());
         if (value.type != 0) {
             Intent intent = new Intent(mContext, PhotoViewActivity.class);
             intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST, value.url);
