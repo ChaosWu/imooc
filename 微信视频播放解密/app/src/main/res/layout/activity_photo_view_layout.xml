@@ -8,25 +8,24 @@
     <TextView
         android:id="@+id/indictor_view"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="22sp"
+    />
+    <ImageView
+        android:id="@+id/share_view"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_alignBottom="@id/indictor_view"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/icon_share"
     />
     <android.support.v4.view.ViewPager
         android:id="@+id/photo_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/indictor_view"/>
-
-    <ImageView
-        android:id="@+id/download_view"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:scaleType="center"
-        android:src="@drawable/icon_arrow"
-    />
+        android:layout_below="@id/indictor_view"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

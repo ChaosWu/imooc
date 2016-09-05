@@ -101,6 +101,7 @@ public class CommonFileCallback implements Callback {
         int currentLength = 0;
         double sumLength;
         try {
+            checkLocalFilePath(mFilePath);
             file = new File(mFilePath);
             fos = new FileOutputStream(file);
             inputStream = response.body().byteStream();
@@ -129,5 +130,21 @@ public class CommonFileCallback implements Callback {
             }
         }
         return file;
+    }
+
+    private void checkLocalFilePath(String localFilePath) {
+        File path = new File(localFilePath.substring(0,
+                localFilePath.lastIndexOf("/") + 1));
+        File file = new File(localFilePath);
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

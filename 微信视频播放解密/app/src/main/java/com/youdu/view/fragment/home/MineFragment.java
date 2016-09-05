@@ -57,7 +57,7 @@ public class MineFragment extends BaseFragment implements OnClickListener {
 
     //自定义了一个广播接收器
     private LoginBroadcastReceiver receiver =
-        new LoginBroadcastReceiver();
+            new LoginBroadcastReceiver();
 
     public MineFragment() {
     }
@@ -174,7 +174,7 @@ public class MineFragment extends BaseFragment implements OnClickListener {
      * 分享慕课网给好友
      */
     private void shareFriend() {
-        ShareDialog dialog = new ShareDialog(mContext);
+        ShareDialog dialog = new ShareDialog(mContext, false);
         dialog.setShareType(Platform.SHARE_IMAGE);
         dialog.setShareTitle("慕课网");
         dialog.setShareTitleUrl("http://www.imooc.com");
@@ -188,14 +188,14 @@ public class MineFragment extends BaseFragment implements OnClickListener {
     private void registerBroadcast() {
 
         IntentFilter filter =
-            new IntentFilter(LoginActivity.LOGIN_ACTION);
+                new IntentFilter(LoginActivity.LOGIN_ACTION);
         LocalBroadcastManager.getInstance(mContext)
-            .registerReceiver(receiver, filter);
+                .registerReceiver(receiver, filter);
     }
 
     private void unregisterBroadcast() {
         LocalBroadcastManager.getInstance(mContext)
-            .unregisterReceiver(receiver);
+                .unregisterReceiver(receiver);
     }
 
     //发送版本检查更新请求
@@ -207,8 +207,8 @@ public class MineFragment extends BaseFragment implements OnClickListener {
                 if (Util.getVersionCode(mContext) < updateModel.data.currentVersion) {
                     //说明有新版本,开始下载
                     CommonDialog dialog = new CommonDialog(mContext, getString(R.string.update_new_version),
-                        getString(R.string.update_title), getString(R.string.update_install),
-                        getString(R.string.cancel), new CommonDialog.DialogClickListener() {
+                            getString(R.string.update_title), getString(R.string.update_install),
+                            getString(R.string.cancel), new CommonDialog.DialogClickListener() {
                         @Override
                         public void onDialogClick() {
                             Intent intent = new Intent(mContext, UpdateService.class);

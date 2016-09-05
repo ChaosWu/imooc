@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class RecommandModel extends BaseModel {
 
-    public ArrayList<RecommandValue> list;
+    public ArrayList<RecommandBodyValue> list;
     public RecommandHeadValue head;
 
 }

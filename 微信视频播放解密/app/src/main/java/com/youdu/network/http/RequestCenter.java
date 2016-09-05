@@ -6,6 +6,7 @@ import com.youdu.module.user.User;
 import com.youdu.okhttp.CommonOkHttpClient;
 import com.youdu.okhttp.listener.DisposeDataHandle;
 import com.youdu.okhttp.listener.DisposeDataListener;
+import com.youdu.okhttp.listener.DisposeDownloadListener;
 import com.youdu.okhttp.request.CommonRequest;
 import com.youdu.okhttp.request.RequestParams;
 
@@ -50,5 +51,12 @@ public class RequestCenter {
     public static void requestRecommandData(DisposeDataListener listener) {
 
         RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND, null, listener, BaseRecommandModel.class);
+    }
+
+    public static void downloadFile(String url, String path, DisposeDownloadListener listener) {
+
+        CommonOkHttpClient.downloadFile(
+                CommonRequest.createGetRequest(url, null),
+                new DisposeDataHandle(listener, path));
     }
 }

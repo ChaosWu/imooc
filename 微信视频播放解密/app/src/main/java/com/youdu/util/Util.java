@@ -12,6 +12,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.youdu.constant.Constant;
 
 import java.util.Hashtable;
 
@@ -69,5 +70,10 @@ public class Util {
     public static Uri createQQUrl(String qq) {
         String result = "mqqwpa://im/chat?chat_type=wpa&uin=".concat(qq);
         return Uri.parse(result);
+    }
+
+    public static String getDownloadPhotoPath(String path) {
+
+        return Constant.APP_PHOTO_DIR + path + ".jpg";
     }
 }

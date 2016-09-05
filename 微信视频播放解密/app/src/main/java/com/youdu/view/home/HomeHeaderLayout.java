@@ -13,6 +13,7 @@ import com.youdu.adapter.PhotoPagerAdapter;
 import com.youdu.module.recommand.RecommandFooterValue;
 import com.youdu.module.recommand.RecommandHeadValue;
 import com.youdu.util.ImageLoaderManager;
+import com.youdu.view.viewpagerindictor.CirclePageIndicator;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
@@ -30,6 +31,7 @@ public class HomeHeaderLayout extends RelativeLayout {
      */
     private RelativeLayout mRootView;
     private AutoScrollViewPager mViewPager;
+    private CirclePageIndicator mPagerIndictor;
     private TextView mHotView;
     private PhotoPagerAdapter mAdapter;
     private ImageView[] mImageViews = new ImageView[4];
@@ -57,6 +59,7 @@ public class HomeHeaderLayout extends RelativeLayout {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mRootView = (RelativeLayout) inflater.inflate(R.layout.listview_home_head_layout, this);
         mViewPager = (AutoScrollViewPager) mRootView.findViewById(R.id.pager);
+        mPagerIndictor = (CirclePageIndicator) mRootView.findViewById(R.id.pager_indictor_view);
         mHotView = (TextView) mRootView.findViewById(R.id.zuixing_view);
         mImageViews[0] = (ImageView) mRootView.findViewById(R.id.head_image_one);
         mImageViews[1] = (ImageView) mRootView.findViewById(R.id.head_image_two);
@@ -67,6 +70,8 @@ public class HomeHeaderLayout extends RelativeLayout {
         mAdapter = new PhotoPagerAdapter(mContext, mHeaderValue.ads, true);
         mViewPager.setAdapter(mAdapter);
         mViewPager.startAutoScroll(3000);
+        mPagerIndictor.setViewPager(mViewPager);
+
         for (int i = 0; i < mImageViews.length; i++) {
             mImageLoader.displayImage(mImageViews[i], mHeaderValue.middle.get(i));
         }

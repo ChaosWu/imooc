@@ -10,8 +10,11 @@ import android.widget.TextView;
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
 import com.youdu.adapter.PhotoPagerAdapter;
+import com.youdu.share.ShareDialog;
 
 import java.util.ArrayList;
+
+import cn.sharesdk.framework.Platform;
 
 /**
  * Created by renzhiqiang on 16/8/31.
@@ -25,13 +28,14 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
      */
     private ViewPager mPager;
     private TextView mIndictorView;
-    private ImageView mDownloadView;
+    private ImageView mShareView;
     /**
      * Data
      */
     private PhotoPagerAdapter mAdapter;
     private ArrayList<String> mPhotoLists;
     private int mLenght;
+    private int currentPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,8 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         mIndictorView = (TextView) findViewById(R.id.indictor_view);
         mIndictorView.setText("1/" + mLenght);
-        mDownloadView = (ImageView) findViewById(R.id.download_view);
-        mDownloadView.setOnClickListener(this);
+        mShareView = (ImageView) findViewById(R.id.share_view);
+        mShareView.setOnClickListener(this);
         mPager = (ViewPager) findViewById(R.id.photo_pager);
         mAdapter = new PhotoPagerAdapter(this, mPhotoLists, false);
         mPager.setAdapter(mAdapter);
@@ -63,7 +67,8 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPageSelected(int position) {
                 mIndictorView.setText(String.valueOf((position + 1)).concat("/").
-                    concat(String.valueOf(mLenght)));
+                        concat(String.valueOf(mLenght)));
+                currentPos = position;
             }
 
             @Override
@@ -76,7 +81,18 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.download_view:
+            case R.id.share_view:
+                ShareDialog dialog = new ShareDialog(this, true);
+                dialog.setShareType(Platform.SHARE_IMAGE);
+                dialog.setShareTitle(getString(R.string.imooc));
+                dialog.setShareTitleUrl(getString(R.string.imooc_site));
+                dialog.setShareText(getString(R.string.imooc));
+                dialog.setShareSite(getString(R.string.imooc));
+                dialog.setShareTitle(getString(R.string.imooc));
+                dialog.setImagePhoto(mPhotoLists.get(currentPos));
+                dialog.setUrl(mPhotoLists.get(currentPos));
+                dialog.setResourceUrl(mPhotoLists.get(currentPos));
+                dialog.show();
                 break;
         }
     }

@@ -111,6 +111,31 @@
                     android:textSize="13sp"
                 />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/download_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="13dp"
+                android:visibility="gone"
+            >
+                <ImageView
+                    android:id="@+id/image_download_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_download"
+                />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_download_view"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/download"
+                    android:textColor="@color/color_999999"
+                    android:textSize="13sp"
+                />
+            </RelativeLayout>
         </LinearLayout>
     </HorizontalScrollView>
     <View

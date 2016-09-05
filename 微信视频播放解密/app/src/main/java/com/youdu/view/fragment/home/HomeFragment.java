@@ -19,10 +19,10 @@ import com.youdu.R;
 import com.youdu.activity.AdBrowserActivity;
 import com.youdu.activity.PhotoViewActivity;
 import com.youdu.activity.SearchActivity;
-import com.youdu.adapter.AdAdapter;
+import com.youdu.adapter.CourseAdapter;
 import com.youdu.constant.Constant;
 import com.youdu.module.recommand.BaseRecommandModel;
-import com.youdu.module.recommand.RecommandValue;
+import com.youdu.module.recommand.RecommandBodyValue;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.okhttp.listener.DisposeDataListener;
 import com.youdu.util.Util;
@@ -55,7 +55,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     /**
      * data
      */
-    private AdAdapter mAdapter;
+    private CourseAdapter mAdapter;
     private BaseRecommandModel mRecommandData;
 
     public HomeFragment() {
@@ -114,7 +114,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             mListView.setVisibility(View.VISIBLE);
             //为listview添加头
             mListView.addHeaderView(new HomeHeaderLayout(mContext, mRecommandData.data.head));
-            mAdapter = new AdAdapter(mContext, mRecommandData.data.list);
+            mAdapter = new CourseAdapter(mContext, mRecommandData.data.list);
             mListView.setAdapter(mAdapter);
             mListView.setOnScrollListener(new OnScrollListener() {
                 @Override
@@ -159,7 +159,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        RecommandValue value = (RecommandValue) mAdapter.getItem(position - mListView.getHeaderViewsCount());
+        RecommandBodyValue value = (RecommandBodyValue) mAdapter.getItem(position - mListView.getHeaderViewsCount());
         if (value.type != 0) {
             Intent intent = new Intent(mContext, PhotoViewActivity.class);
             intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST, value.url);

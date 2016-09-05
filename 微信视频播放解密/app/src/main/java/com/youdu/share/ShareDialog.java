@@ -4,14 +4,20 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.youdu.R;
+import com.youdu.constant.Constant;
+import com.youdu.network.http.RequestCenter;
+import com.youdu.okhttp.listener.DisposeDownloadListener;
+import com.youdu.util.Util;
 
 import java.util.HashMap;
 
@@ -33,6 +39,7 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     private RelativeLayout mWeixinMomentLayout;
     private RelativeLayout mQQLayout;
     private RelativeLayout mQZoneLayout;
+    private RelativeLayout mDownloadLayout;
     private TextView mCancelView;
 
     /**
@@ -46,12 +53,15 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
     private String mShareSiteUrl;
     private String mShareSite;
     private String mUrl;
+    private String mResourceUrl;
 
+    private boolean isShowDownload;
 
-    public ShareDialog(Context context) {
+    public ShareDialog(Context context, boolean isShowDownload) {
         super(context, R.style.SheetDialogStyle);
         mContext = context;
         dm = mContext.getResources().getDisplayMetrics();
+        this.isShowDownload = isShowDownload;
     }
 
     @Override
@@ -79,10 +89,18 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
         mQQLayout.setOnClickListener(this);
         mQZoneLayout = (RelativeLayout) findViewById(R.id.qzone_layout);
         mQZoneLayout.setOnClickListener(this);
+        mDownloadLayout = (RelativeLayout) findViewById(R.id.download_layout);
+        mDownloadLayout.setOnClickListener(this);
+        if (isShowDownload) {
+            mDownloadLayout.setVisibility(View.VISIBLE);
+        }
         mCancelView = (TextView) findViewById(R.id.cancel_view);
         mCancelView.setOnClickListener(this);
     }
 
+    public void setResourceUrl(String resourceUrl) {
+        mResourceUrl = resourceUrl;
+    }
 
     public void setShareTitle(String title) {
         mShareTitle = title;
@@ -133,6 +151,33 @@ public class ShareDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.cancel_view:
                 dismiss();
+                break;
+            case R.id.download_layout:
+                //检查文件夹是否存在
+                RequestCenter.downloadFile(mResourceUrl,
+                       Constant.APP_PHOTO_DIR.concat(String.valueOf(System.currentTimeMillis())),
+                        new DisposeDownloadListener() {
+                            @Override
+                            public void onSuccess(Object responseObj) {
+                                Toast.makeText(mContext,
+                                        mContext.getString(R.string.download_success),
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+
+                            @Override
+                            public void onFailure(Object reasonObj) {
+                                Toast.makeText(mContext,
+                                        mContext.getString(R.string.download_failed) + mResourceUrl,
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+
+                            @Override
+                            public void onProgress(int progrss) {
+                                Log.e("dialog", progrss + "XX");
+                            }
+                        });
                 break;
         }
     }

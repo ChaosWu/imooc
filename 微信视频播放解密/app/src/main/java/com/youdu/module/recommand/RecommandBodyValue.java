@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @文件描述：搜索实体
  * @修改历史：2015年7月9日创建初始版本 ********************************************************
  */
-public class RecommandValue extends BaseModel {
+public class RecommandBodyValue extends BaseModel {
 
     public int type;
     public String logo;
