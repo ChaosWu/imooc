@@ -22,6 +22,7 @@ import com.youdu.core.context.AdContext;
 import com.youdu.module.recommand.RecommandBodyValue;
 import com.youdu.share.ShareDialog;
 import com.youdu.util.ImageLoaderManager;
+import com.youdu.util.Util;
 import com.youdu.util.Utils;
 
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_video_layout, parent, false);
                     mViewHolder.mVieoContentLayout = (RelativeLayout)
-                            convertView.findViewById(R.id.video_ad_layout);
+                        convertView.findViewById(R.id.video_ad_layout);
                     mViewHolder.mLogoView = (CircleImageView) convertView.findViewById(R.id.item_logo_view);
                     mViewHolder.mTitleView = (TextView) convertView.findViewById(R.id.item_title_view);
                     mViewHolder.mInfoView = (TextView) convertView.findViewById(R.id.item_info_view);
@@ -105,7 +106,7 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder.mShareView = (ImageView) convertView.findViewById(R.id.item_share_view);
                     //为对应布局创建播放器
                     mAdsdkContext = new AdContext(mViewHolder.mVieoContentLayout,
-                            new Gson().toJson(value), null);
+                        new Gson().toJson(value), null);
                     mAdsdkContext.setAdResultListener(new AdContextInterface() {
                         @Override
                         public void onAdSuccess() {
@@ -151,9 +152,11 @@ public class CourseAdapter extends BaseAdapter {
                     mViewHolder = new ViewHolder();
                     convertView = mInflate.inflate(R.layout.item_product_card_three_layout, null, false);
                     mViewHolder.mViewPager = (ViewPager) convertView.findViewById(R.id.pager);
-                    //开始为ViewPager添加数据
-                    mViewHolder.mViewPager.setPageMargin(Utils.dip2px(mContext, 15));
-                    mViewHolder.mViewPager.setAdapter(new HotSalePagerAdapter(mContext));
+                    //add data
+                    ArrayList<RecommandBodyValue> recommandList = Util.handleData(value);
+                    mViewHolder.mViewPager.setPageMargin(Utils.dip2px(mContext, 12));
+                    mViewHolder.mViewPager.setAdapter(new HotSalePagerAdapter(mContext, recommandList));
+                    mViewHolder.mViewPager.setCurrentItem(recommandList.size() * 100);
                     break;
             }
             convertView.setTag(mViewHolder);
@@ -229,11 +232,12 @@ public class CourseAdapter extends BaseAdapter {
         }
     }
 
+    //动态添加ImageView
     private ImageView createImageView(String url) {
         ImageView photoView = new ImageView(mContext);
         LinearLayout.LayoutParams params = new LinearLayout.
-                LayoutParams(Utils.dip2px(mContext, 100),
-                LinearLayout.LayoutParams.MATCH_PARENT);
+            LayoutParams(Utils.dip2px(mContext, 100),
+            LinearLayout.LayoutParams.MATCH_PARENT);
         params.leftMargin = Utils.dip2px(mContext, 5);
         photoView.setLayoutParams(params);
         mImagerLoader.displayImage(photoView, url);
