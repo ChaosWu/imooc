@@ -1,5 +1,6 @@
 package com.imooc.viewpagertest;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -7,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.imooc.viewpagertest.webp.WebpUtils;
+
+import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,15 +34,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        imgIdArray = new int[]{R.raw.bg_1_a_01,
+                R.raw.bg_1_b_01,
+                R.raw.bg_2_a_01,
+                R.raw.bg_2_b_01};
 
-        imgIdArray = new int[]{R.drawable.bg_1_a_01, R.drawable.bg_1_b_01, R.drawable.bg_1_c_01, R.drawable.bg_2_a_01,
-                R.drawable.bg_2_b_01};
         //将图片装载到数组中
         mImageViews = new ImageView[imgIdArray.length];
         for (int i = 0; i < mImageViews.length; i++) {
             ImageView imageView = new ImageView(this);
             mImageViews[i] = imageView;
-            imageView.setBackgroundResource(imgIdArray[i]);
+            imageView.setImageBitmap(showAlbum(imgIdArray[i]));
         }
 
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -48,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
         mPager.setCurrentItem((mImageViews.length) * 100);
     }
 
+    //将webp转化为bitmap
+    private Bitmap showAlbum(int resourceID) {
+        InputStream rawImageStream = getResources().openRawResource(resourceID);
+        byte[] data = WebpUtils.streamToBytes(rawImageStream);
+        Bitmap webpBitmap = WebpUtils.webpToBitmap(data);
+        return webpBitmap;
+    }
 
     /**
      * @author xiaanming

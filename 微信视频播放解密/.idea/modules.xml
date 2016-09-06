@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewpagertest/viewpagertest.iml" filepath="$PROJECT_DIR$/viewpagertest/viewpagertest.iml" />
       <module fileurl="file://$PROJECT_DIR$/vuandroidadsdk/vuandroidadsdk.iml" filepath="$PROJECT_DIR$/vuandroidadsdk/vuandroidadsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/微信视频播放解密.iml" filepath="$PROJECT_DIR$/微信视频播放解密.iml" />
     </modules>

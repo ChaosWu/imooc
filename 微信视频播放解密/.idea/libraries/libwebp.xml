@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="libwebp">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/viewpagertest/libs/libwebp.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
