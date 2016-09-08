@@ -1,5 +1,6 @@
 package com.youdu.network.http;
 
+import com.youdu.module.course.BaseCourseModel;
 import com.youdu.module.recommand.BaseRecommandModel;
 import com.youdu.module.update.UpdateModel;
 import com.youdu.module.user.User;
@@ -20,7 +21,7 @@ public class RequestCenter {
     //根据参数发送所有post请求
     public static void postRequest(String url, RequestParams params, DisposeDataListener listener, Class<?> clazz) {
         CommonOkHttpClient.get(CommonRequest.
-                createGetRequest(url, params), new DisposeDataHandle(listener, clazz));
+            createGetRequest(url, params), new DisposeDataHandle(listener, clazz));
     }
 
     /**
@@ -56,7 +57,20 @@ public class RequestCenter {
     public static void downloadFile(String url, String path, DisposeDownloadListener listener) {
 
         CommonOkHttpClient.downloadFile(
-                CommonRequest.createGetRequest(url, null),
-                new DisposeDataHandle(listener, path));
+            CommonRequest.createGetRequest(url, null),
+            new DisposeDataHandle(listener, path));
+    }
+
+    /**
+     * 请求课程详情
+     *
+     * @param userName
+     * @param passwd
+     * @param listener
+     */
+    public static void requestCourseDetail(String courseId, DisposeDataListener listener) {
+        RequestParams params = new RequestParams();
+        params.put("courseId", courseId);
+        RequestCenter.postRequest(HttpConstants.COURSE_DETAIL, params, listener, BaseCourseModel.class);
     }
 }
