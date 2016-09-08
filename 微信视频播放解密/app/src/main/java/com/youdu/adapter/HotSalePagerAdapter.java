@@ -1,6 +1,7 @@
 package com.youdu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.youdu.R;
+import com.youdu.activity.CourseDetailActivity;
 import com.youdu.module.recommand.RecommandBodyValue;
 import com.youdu.util.ImageLoaderManager;
 
@@ -50,7 +52,7 @@ public class HotSalePagerAdapter extends PagerAdapter {
      */
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        RecommandBodyValue value = mData.get(position % mData.size());
+        final RecommandBodyValue value = mData.get(position % mData.size());
         View rootView = mInflate.inflate(R.layout.item_hot_product_pager_layout, null);
         TextView titleView = (TextView) rootView.findViewById(R.id.title_view);
         TextView infoView = (TextView) rootView.findViewById(R.id.info_view);
@@ -60,6 +62,14 @@ public class HotSalePagerAdapter extends PagerAdapter {
         imageViews[0] = (ImageView) rootView.findViewById(R.id.image_one);
         imageViews[1] = (ImageView) rootView.findViewById(R.id.image_two);
         imageViews[2] = (ImageView) rootView.findViewById(R.id.image_three);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, CourseDetailActivity.class);
+                intent.putExtra(CourseDetailActivity.COURSE_ID, value.adid);
+                mContext.startActivity(intent);
+            }
+        });
 
         titleView.setText(value.title);
         infoView.setText(value.price);

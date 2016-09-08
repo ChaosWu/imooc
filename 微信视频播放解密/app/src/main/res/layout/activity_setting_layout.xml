@@ -24,7 +24,6 @@
             android:text="@string/video_play_setting"
             android:textColor="@color/color_333333"
             android:textSize="22sp"
-
         />
     </RelativeLayout>
 

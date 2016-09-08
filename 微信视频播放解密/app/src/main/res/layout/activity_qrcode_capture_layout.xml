@@ -23,14 +23,14 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            layout="@layout/activity_qrcode_title" />
+            layout="@layout/item_qrcode_title" />
 
         <include
             android:id="@+id/include2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            layout="@layout/activity_qrcode_footer" />
+            layout="@layout/item_qrcode_footer" />
     </RelativeLayout>
 
 </FrameLayout>

@@ -76,6 +76,8 @@
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".activity.PhotoViewActivity"/>
         <activity android:name=".activity.MessageActivity"/>
+        <activity android:name=".activity.CourseDetailActivity"
+                  android:launchMode="singleTop"/>
         <!--本地产品更新列表服务 -->
         <service android:name=".service.UpdateProductService"/>
         <service android:name=".network.mina.MinaService"/>

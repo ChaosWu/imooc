@@ -58,7 +58,7 @@
     <string name="imooc">慕课网</string>
     <string name="imooc_site">http://www.imooc.com</string>
     <string name="today_zuixing">------------&#062;&#062;今日最新&#060;&#060;------------</string>
-    <string name="history_hot">------------&#062;&#062;历史最热&#060;&#060;------------</string>
+    <string name="course_detail">课程详情</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>
