@@ -45,7 +45,7 @@ public class CourseDetailFooterView extends RelativeLayout {
 
     private void initView() {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        mRootView = (RelativeLayout) inflater.inflate(R.layout.listview_comment_footer_layout, this);
+        mRootView = (RelativeLayout) inflater.inflate(R.layout.listview_course_comment_footer_layout, this);
         mContentLayout = (LinearLayout) mRootView.findViewById(R.id.content_layout);
 
         for (CourseFooterValue item : mFooterValues) {

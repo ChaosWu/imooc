@@ -32,6 +32,14 @@
         />
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scaleType="center"
+        android:src="@drawable/loading_data_anim"
+    />
     <ListView
         android:id="@+id/comment_list_view"
         android:layout_width="match_parent"
@@ -39,5 +47,6 @@
         android:alwaysDrawnWithCache="false"
         android:divider="@color/color_cccccc"
         android:dividerHeight="0.5dp"
+        android:visibility="gone"
     />
 </LinearLayout>

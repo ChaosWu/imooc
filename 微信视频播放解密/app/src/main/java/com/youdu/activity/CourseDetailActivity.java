@@ -8,6 +8,12 @@ import android.widget.ListView;
 
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
+import com.youdu.adapter.CourseCommentAdapter;
+import com.youdu.module.course.BaseCourseModel;
+import com.youdu.network.http.RequestCenter;
+import com.youdu.okhttp.listener.DisposeDataListener;
+import com.youdu.view.course.CourseDetailFooterView;
+import com.youdu.view.course.CourseDetailHeaderView;
 
 /**
  * @author: vision
@@ -23,10 +29,13 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
      */
     private ImageView mBackView;
     private ListView mListView;
+    private ImageView mLoadingView;
+    private CourseCommentAdapter mAdapter;
     /**
      * Data
      */
     private String mCourseID;
+    private BaseCourseModel mData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_course_detail_layout);
         initData();
         initView();
+        requestDeatil();
     }
 
     //初始化数据
@@ -47,6 +57,33 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         mBackView = (ImageView) findViewById(R.id.back_view);
         mBackView.setOnClickListener(this);
         mListView = (ListView) findViewById(R.id.comment_list_view);
+        mLoadingView = (ImageView) findViewById(R.id.loading_view);
+    }
+
+    private void requestDeatil() {
+
+        RequestCenter.requestCourseDetail(mCourseID, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                mData = (BaseCourseModel) responseObj;
+                updateUI();
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+
+            }
+        });
+    }
+
+    //根据数据填充UI
+    private void updateUI() {
+        mLoadingView.setVisibility(View.GONE);
+        mListView.setVisibility(View.VISIBLE);
+        mAdapter = new CourseCommentAdapter(this, mData.data.body);
+        mListView.setAdapter(mAdapter);
+        mListView.addHeaderView(new CourseDetailHeaderView(this, mData.data.head));
+        mListView.addFooterView(new CourseDetailFooterView(this, mData.data.footer));
     }
 
     @Override
