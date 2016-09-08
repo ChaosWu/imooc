@@ -35,6 +35,11 @@ public class HttpConstants {
     public static String HOME_RECOMMAND = ROOT_URL + "/product/home_recommand.php";
 
     /**
+     * 课程详情接口
+     */
+    public static String COURSE_DETAIL = ROOT_URL + "/product/course_detail.php";
+
+    /**
      * QQ在线交谈
      */
     public static String ONLINE_SERVICE = "mqqwpa://im/chat?chat_type=crm&uin=800113900&version=1&src_type=web&web_src=http:://www.qianjing.com";
