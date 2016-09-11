@@ -1,5 +1,6 @@
 package com.youdu.module.course;
 
+import com.youdu.module.AdValue;
 import com.youdu.module.BaseModel;
 
 import java.util.ArrayList;
@@ -22,4 +23,5 @@ public class CourseHeaderValue extends BaseModel {
     public String hotComment;
     public String from;
     public String dayTime;
+    public AdValue video;
 }

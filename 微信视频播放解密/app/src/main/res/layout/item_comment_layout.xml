@@ -23,6 +23,19 @@
         android:textSize="13sp"
     />
     <TextView
+        android:id="@+id/owner_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/name_view"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/name_view"
+        android:background="@drawable/bg_comment_owner"
+        android:padding="3dp"
+        android:text="@string/owner"
+        android:textColor="@color/color_ff33b5e5"
+        android:textSize="7sp"
+    />
+    <TextView
         android:id="@+id/text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
