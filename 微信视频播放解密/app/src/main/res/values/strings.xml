@@ -63,6 +63,10 @@
     <string name="last_week_visti">最近一周课程查看人数:</string>
     <string name="owner">主人</string>
     <string name="guess_you_like">猜你喜欢</string>
+    <string name="send">发送</string>
+    <string name="input_comment">请输入留言</string>
+    <string name="comment_hint_head">回复@</string>
+    <string name="comment_hint_footer">:</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>
