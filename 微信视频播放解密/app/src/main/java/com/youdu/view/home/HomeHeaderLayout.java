@@ -1,14 +1,17 @@
 package com.youdu.view.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youdu.R;
+import com.youdu.activity.CourseDetailActivity;
 import com.youdu.adapter.PhotoPagerAdapter;
 import com.youdu.module.recommand.RecommandFooterValue;
 import com.youdu.module.recommand.RecommandHeadValue;

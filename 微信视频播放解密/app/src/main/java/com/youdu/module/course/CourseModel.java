@@ -12,6 +12,6 @@ import java.util.ArrayList;
 public class CourseModel extends BaseModel {
 
     public CourseHeaderValue head;
-    public ArrayList<CourseFooterValue> footer;
+    public CourseFooterValue footer;
     public ArrayList<CourseCommentValue> body;
 }

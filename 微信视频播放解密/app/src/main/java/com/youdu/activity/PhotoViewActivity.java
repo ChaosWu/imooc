@@ -11,6 +11,7 @@ import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
 import com.youdu.adapter.PhotoPagerAdapter;
 import com.youdu.share.ShareDialog;
+import com.youdu.util.Utils;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
         mShareView.setOnClickListener(this);
         mPager = (ViewPager) findViewById(R.id.photo_pager);
         mAdapter = new PhotoPagerAdapter(this, mPhotoLists, false);
+        mPager.setPageMargin(Utils.dip2px(this, 30));
         mPager.setAdapter(mAdapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

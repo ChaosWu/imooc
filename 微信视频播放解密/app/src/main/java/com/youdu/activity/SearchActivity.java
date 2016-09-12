@@ -1,5 +1,6 @@
 package com.youdu.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -161,14 +162,19 @@ public class SearchActivity extends BaseActivity implements OnClickListener, OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
                             long id) {
+        Intent intent = new Intent(this, CourseDetailActivity.class);
         switch (parent.getId()) {
             case R.id.history_list_view:
                 fundModel = (ProductModel) historyAdapter.getItem(position);
+                intent.putExtra(CourseDetailActivity.COURSE_ID, fundModel.fdcode);
+                startActivity(intent);
                 break;
             case R.id.fund_list_view:
                 fundModel = (ProductModel) searchingAdapter
                         .getItem(position);
                 insertHistoryTable();
+                intent.putExtra(CourseDetailActivity.COURSE_ID, fundModel.fdcode);
+                startActivity(intent);
                 break;
         }
     }

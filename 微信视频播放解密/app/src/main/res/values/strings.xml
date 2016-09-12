@@ -60,6 +60,9 @@
     <string name="today_zuixing">------------&#062;&#062;今日最新&#060;&#060;------------</string>
     <string name="course_detail">课程详情</string>
     <string name="danbao_trade">担保交易</string>
+    <string name="last_week_visti">最近一周课程查看人数:</string>
+    <string name="owner">主人</string>
+    <string name="guess_you_like">猜你喜欢</string>
 
     <!-- QR_Code -->
     <string name="button_ok">OK</string>

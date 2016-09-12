@@ -2,6 +2,8 @@ package com.youdu.module.course;
 
 import com.youdu.module.BaseModel;
 
+import java.util.ArrayList;
+
 /**
  * @author: vision
  * @function:
@@ -9,8 +11,6 @@ import com.youdu.module.BaseModel;
  */
 public class CourseFooterValue extends BaseModel {
 
-    public String photoUrl;
-    public String name;
-    public String price;
-    public String zan;
+    public ArrayList<CourseFooterDateValue> time;
+    public ArrayList<CourseFooterRecommandValue> recommand;
 }
