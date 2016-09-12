@@ -3,6 +3,7 @@ package com.youdu.activity;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
 import com.youdu.adapter.CourseCommentAdapter;
+import com.youdu.manager.UserManager;
 import com.youdu.module.course.BaseCourseModel;
 import com.youdu.module.course.CourseCommentValue;
+import com.youdu.module.user.User;
 import com.youdu.network.http.RequestCenter;
 import com.youdu.okhttp.listener.DisposeDataListener;
 import com.youdu.util.Util;
@@ -50,6 +53,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
      */
     private String mCourseID;
     private BaseCourseModel mData;
+    private String tempHint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         mSendView = (TextView) findViewById(R.id.send_view);
         mSendView.setOnClickListener(this);
         mBottomLayout.setVisibility(View.GONE);
+        intoEmptyState();
     }
 
     private void requestDeatil() {
@@ -134,18 +139,30 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         mInputEditView.requestFocus();
     }
 
-    String tempHint;
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int cursor = position - mListView.getHeaderViewsCount();
         if (cursor < mAdapter.getCommentCount()) {
             CourseCommentValue value = (CourseCommentValue) mAdapter.getItem(
                 position - mListView.getHeaderViewsCount());
-            tempHint = "回复@" + value.name + ":";
-            mInputEditView.setHint(tempHint);
-            Util.showSoftInputMethod(this, mInputEditView);
+            tempHint = getString(R.string.comment_hint_head).concat(value.name).
+                concat(getString(R.string.comment_hint_footer));
+            intoEditState(tempHint);
         }
+    }
+
+    /**
+     * EditText进入编辑状态
+     */
+    private void intoEditState(String hint) {
+        mInputEditView.setHint(tempHint);
+        Util.showSoftInputMethod(this, mInputEditView);
+    }
+
+    public void intoEmptyState() {
+        mInputEditView.setText("");
+        mInputEditView.setHint(getString(R.string.input_comment));
+        Util.hideSoftInputMethod(this, mInputEditView);
     }
 
     @Override
@@ -156,19 +173,34 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.send_view:
                 String comment = mInputEditView.getText().toString().trim();
-                CourseCommentValue value = new CourseCommentValue();
-                value.name = "游客1123";
-                value.type = 1;
-                value.text = tempHint + comment;
-                mAdapter.addComment(value);
+                if (UserManager.getInstance().hasLogined()) {
+                    if (!TextUtils.isEmpty(comment)) {
+                        mAdapter.addComment(assembleCommentValue(comment));
+                        intoEmptyState();
+                    }
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
 
-                mInputEditView.setText("");
-                mInputEditView.setHint("");
-                Util.hideSoftInputMethod(this, mSendView);
                 break;
             case R.id.jianpan_view:
                 Util.showSoftInputMethod(this, mInputEditView);
                 break;
         }
+    }
+
+    /**
+     * 组装CommentValue对象
+     *
+     * @return
+     */
+    private CourseCommentValue assembleCommentValue(String comment) {
+        User user = UserManager.getInstance().getUser();
+        CourseCommentValue value = new CourseCommentValue();
+        value.name = user.data.name;
+        value.logo = user.data.photoUrl;
+        value.type = 1;
+        value.text = tempHint + comment;
+        return value;
     }
 }

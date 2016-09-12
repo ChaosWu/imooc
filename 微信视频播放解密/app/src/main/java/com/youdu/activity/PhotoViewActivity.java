@@ -11,6 +11,7 @@ import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
 import com.youdu.adapter.PhotoPagerAdapter;
 import com.youdu.share.ShareDialog;
+import com.youdu.util.Util;
 import com.youdu.util.Utils;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onPageSelected(int position) {
                 mIndictorView.setText(String.valueOf((position + 1)).concat("/").
-                        concat(String.valueOf(mLenght)));
+                    concat(String.valueOf(mLenght)));
                 currentPos = position;
             }
 
@@ -78,6 +79,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
+        Util.hideSoftInputMethod(this, mIndictorView);
     }
 
     @Override
