@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -102,5 +104,23 @@ public class Util {
             tempUrls.add(source.get(i));
         }
         return tempUrls;
+    }
+
+    /**
+     * 显示系统软件盘
+     * 传入的View必须是EditText及其子类才可以强制显示出
+     */
+    public static void showSoftInputMethod(Context context, View v) {
+        /* 隐藏软键盘 */
+        InputMethodManager inputMethodManager = (InputMethodManager) context
+            .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+    }
+
+    public static void hideSoftInputMethod(Context context, View v) {
+        /* 隐藏软键盘 */
+        InputMethodManager inputMethodManager = (InputMethodManager) context
+            .getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }

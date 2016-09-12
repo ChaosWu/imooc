@@ -77,6 +77,15 @@ public class CourseCommentAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void addComment(CourseCommentValue value) {
+        mData.add(0, value);
+        notifyDataSetChanged();
+    }
+
+    public int getCommentCount() {
+        return mData.size();
+    }
+
     private static class ViewHolder {
 
         CircleImageView mImageView;
