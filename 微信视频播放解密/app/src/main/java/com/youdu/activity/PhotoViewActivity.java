@@ -79,6 +79,7 @@ public class PhotoViewActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
+
         Util.hideSoftInputMethod(this, mIndictorView);
     }
 

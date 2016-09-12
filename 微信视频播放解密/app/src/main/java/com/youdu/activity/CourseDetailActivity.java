@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.youdu.R;
 import com.youdu.activity.base.BaseActivity;
@@ -53,7 +54,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
      */
     private String mCourseID;
     private BaseCourseModel mData;
-    private String tempHint;
+    private String tempHint = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         mSendView = (TextView) findViewById(R.id.send_view);
         mSendView.setOnClickListener(this);
         mBottomLayout.setVisibility(View.GONE);
+
         intoEmptyState();
     }
 
@@ -136,18 +138,28 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         mListView.addFooterView(footerView);
 
         mBottomLayout.setVisibility(View.VISIBLE);
-        mInputEditView.requestFocus();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         int cursor = position - mListView.getHeaderViewsCount();
-        if (cursor < mAdapter.getCommentCount()) {
-            CourseCommentValue value = (CourseCommentValue) mAdapter.getItem(
-                position - mListView.getHeaderViewsCount());
-            tempHint = getString(R.string.comment_hint_head).concat(value.name).
-                concat(getString(R.string.comment_hint_footer));
-            intoEditState(tempHint);
+        if (cursor >= 0 && cursor < mAdapter.getCommentCount()) {
+            if (UserManager.getInstance().hasLogined()) {
+                CourseCommentValue value = (CourseCommentValue) mAdapter.getItem(
+                        position - mListView.getHeaderViewsCount());
+                if (value.userId.equals(UserManager.getInstance().getUser().data.userId)) {
+                    //自己的评论不能回复
+                    intoEmptyState();
+                    Toast.makeText(this, "不能回复自己!", Toast.LENGTH_SHORT).show();
+                } else {
+                    //不是自己的评论，可以回复
+                    tempHint = getString(R.string.comment_hint_head).concat(value.name).
+                            concat(getString(R.string.comment_hint_footer));
+                    intoEditState(tempHint);
+                }
+            } else {
+                startActivity(new Intent(this, LoginActivity.class));
+            }
         }
     }
 
@@ -155,11 +167,13 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
      * EditText进入编辑状态
      */
     private void intoEditState(String hint) {
-        mInputEditView.setHint(tempHint);
+        mInputEditView.requestFocus();
+        mInputEditView.setHint(hint);
         Util.showSoftInputMethod(this, mInputEditView);
     }
 
     public void intoEmptyState() {
+        tempHint = "";
         mInputEditView.setText("");
         mInputEditView.setHint(getString(R.string.input_comment));
         Util.hideSoftInputMethod(this, mInputEditView);
@@ -184,6 +198,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
 
                 break;
             case R.id.jianpan_view:
+                mInputEditView.requestFocus();
                 Util.showSoftInputMethod(this, mInputEditView);
                 break;
         }
@@ -199,6 +214,7 @@ public class CourseDetailActivity extends BaseActivity implements View.OnClickLi
         CourseCommentValue value = new CourseCommentValue();
         value.name = user.data.name;
         value.logo = user.data.photoUrl;
+        value.userId = user.data.userId;
         value.type = 1;
         value.text = tempHint + comment;
         return value;
